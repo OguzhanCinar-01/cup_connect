@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'home_view.dart';
 
 class DessertTab extends StatelessWidget {
   const DessertTab({super.key});

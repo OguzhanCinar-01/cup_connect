@@ -1,19 +1,20 @@
-import 'package:coffee_shop/services/auth/firebase_options.dart';
-import 'package:coffee_shop/services/auth/auth_gate.dart';
-import 'package:coffee_shop/services/auth/auth_service.dart';
+import 'services/auth/auth_gate.dart';
+import 'services/auth/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'notifier/provider_manager.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => AuthService(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(MultiProvider(
+    providers: [
+      ...ProviderManager.instance.providers,
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,10 +23,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
       debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        home: AuthGate(),
+      title: 'Flutter Demo',
+      home: const AuthGate(),
     );
   }
 }

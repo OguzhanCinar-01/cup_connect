@@ -1,9 +1,9 @@
-import 'package:coffee_shop/extensions/space_exs.dart';
-import 'package:coffee_shop/services/auth/auth_service.dart';
-import 'package:coffee_shop/utils/app_colors.dart';
-import 'package:coffee_shop/utils/cupconnect_logo.dart';
-import 'package:coffee_shop/views/login/widget/my_button.dart';
-import 'package:coffee_shop/views/login/widget/my_textfield.dart';
+import '../../../extensions/space_exs.dart';
+import '../../../services/auth/auth_service.dart';
+import '../../../utils/app_colors.dart';
+import '../../../utils/cupconnect_logo.dart';
+import '../widget/my_button.dart';
+import '../widget/my_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

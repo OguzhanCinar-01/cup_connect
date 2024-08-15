@@ -1,6 +1,6 @@
-import 'package:coffee_shop/extensions/space_exs.dart';
-import 'package:coffee_shop/utils/app_colors.dart';
-import 'package:coffee_shop/utils/cupconnect_logo.dart';
+import '../../../extensions/space_exs.dart';
+import '../../../utils/app_colors.dart';
+import '../../../utils/cupconnect_logo.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,11 +10,14 @@ class HomeViewAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        color: AppColors.backgroundColor,
+        color: AppColors.surface,
         width: double.infinity,
         height: 70,
         child: Padding(
-          padding: const EdgeInsets.only(top: 30,left: 130,),
+          padding: const EdgeInsets.only(
+            top: 30,
+            left: 130,
+          ),
           child: Row(
             children: [
               ///Logo
@@ -23,6 +26,7 @@ class HomeViewAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.black,
               ),
               80.w,
+
               ///Notification icon
               const Icon(
                 Icons.notifications_none,

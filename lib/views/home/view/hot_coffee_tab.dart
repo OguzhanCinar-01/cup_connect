@@ -1,8 +1,7 @@
-import 'package:coffee_shop/views/home/widget/coffee_grid_item.dart';
-import 'package:flutter/material.dart';
+part of 'home_view.dart';
 
-class HotCoffeeTab extends StatelessWidget {
-  const HotCoffeeTab({super.key});
+class _HotCoffeeTab extends StatelessWidget {
+  const _HotCoffeeTab();
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'home_view.dart';
 
 class ColdCoffeeTab extends StatelessWidget {
   const ColdCoffeeTab({super.key});
