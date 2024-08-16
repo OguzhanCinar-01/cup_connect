@@ -12,31 +12,37 @@ class _HotCoffeeTab extends StatelessWidget {
           imagePath: 'assets/images/hot_cappucino.png',
           title: 'Cappuccino',
           price: 4.99,
+          description: 'Classic',
         ),
         CoffeeGridItem(
           imagePath: 'assets/images/hot_cappucino.png',
           title: 'Latte',
           price: 3.99,
+          description: 'With chocolate syrup',
         ),
         CoffeeGridItem(
           imagePath: 'assets/images/hot_cappucino.png',
           title: 'Latte',
           price: 3.99,
+          description: 'With hazelnut syrup',
         ),
         CoffeeGridItem(
           imagePath: 'assets/images/hot_cappucino.png',
           title: 'Latte',
           price: 3.99,
+          description: 'With hazelnut syrup',
         ),
         CoffeeGridItem(
           imagePath: 'assets/images/hot_cappucino.png',
           title: 'Latte',
           price: 3.99,
+          description: 'With hazelnut syrup',
         ),
         CoffeeGridItem(
           imagePath: 'assets/images/hot_cappucino.png',
           title: 'Latte',
           price: 3.99,
+          description: 'With hazelnut syrup',
         ),
       ],
     );

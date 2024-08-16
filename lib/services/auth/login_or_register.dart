@@ -1,5 +1,5 @@
-import '../../views/login/screens/login_view.dart';
-import '../../views/login/screens/register_view.dart';
+import '../../views/login/view/login_view.dart';
+import '../../views/login/view/register_view.dart';
 import 'package:flutter/material.dart';
 
 class LoginOrRegister extends StatefulWidget {

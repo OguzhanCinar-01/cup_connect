@@ -1,3 +1,6 @@
+import 'package:coffee_shop/navigation/navigation_manager.dart';
+import 'package:coffee_shop/services/auth/login_or_register.dart';
+
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../utils/app_colors.dart';
@@ -15,7 +18,8 @@ part 'dessert_tab.dart';
 part 'hot_coffee_tab.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key,});
+
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -35,10 +39,10 @@ class _HomeViewState extends State<HomeView> {
   ];
   void signOut() {
     ///get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
-
+    final AuthService authService = Provider.of<AuthService>(context, listen: false);
     ///Logout
     authService.signOut();
+    
   }
 
   @override
@@ -77,7 +81,6 @@ class _HomeViewState extends State<HomeView> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 30),
               child: TextField(
-                ///Search bar
                 decoration: InputDecoration(
                   hintText: 'Search',
                   hintStyle: GoogleFonts.poppins(

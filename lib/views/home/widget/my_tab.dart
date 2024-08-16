@@ -19,15 +19,15 @@ class MyTab extends StatelessWidget {
               width: 42,
               height: 40,
             ),
-             Expanded(
-               child: Text(
+            Expanded(
+              child: Text(
                 title,
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
-                           ),
-             ),
+              ),
+            ),
           ],
         ),
       ),
