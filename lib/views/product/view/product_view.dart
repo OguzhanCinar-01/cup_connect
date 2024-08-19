@@ -1,13 +1,12 @@
 import 'package:coffee_shop/extensions/space_exs.dart';
-import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
+import 'package:coffee_shop/views/product/widget/add_to_cart_button.dart';
 import 'package:coffee_shop/views/product/widget/go_back_button.dart';
-import 'package:coffee_shop/views/product/widget/product_view_app_bar.dart';
 import 'package:coffee_shop/views/product/widget/size_button.dart';
+import 'package:coffee_shop/views/product/widget/syrup_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class ProductView extends StatefulWidget {
   const ProductView({super.key});
@@ -62,28 +61,39 @@ class _ProductViewState extends State<ProductView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizeButton(
+                  index: 0,
                   sizeButtonTitle: AppStr.sizeButtonTitleSmall,
                 ),
                 SizeButton(
+                  index: 1,
                   sizeButtonTitle: AppStr.sizeButtonTitleMedium,
                 ),
                 SizeButton(
+                  index: 2,
                   sizeButtonTitle: AppStr.sizeButtonTitleLarge,
                 ),
               ],
             ),
 
             ///About the product
-            Padding(
-              padding: const EdgeInsets.only(left: 40, top: 40, bottom: 8),
-              child: Text(
-                AppStr.aboutProduct,
-                style: GoogleFonts.lato(
-                  color: AppColors.onSurface,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 40, bottom: 20),
+                  child: Text(
+                    AppStr.aboutProduct,
+                    style: GoogleFonts.lato(
+                      color: AppColors.onSurface,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 10),
+                  child: SyrupDropdown(),
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -98,12 +108,7 @@ class _ProductViewState extends State<ProductView> {
             ///Add to cart button
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 80, vertical: 60),
-              child: SizeButton(
-                sizeButtonTitle: 'Add to cart',
-                sizeButtonWidth: 300,
-                sizeButtonHeight: 70,
-                sizeButtonFontSize: 24,
-              ),
+              child: AddToCartButton(),
             ),
           ],
         ),

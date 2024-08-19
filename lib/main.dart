@@ -1,7 +1,4 @@
 import 'package:coffee_shop/navigation/navigation_manager.dart';
-import 'package:coffee_shop/views/home/view/home_view.dart';
-import 'package:coffee_shop/views/product/view/product_view.dart';
-
 import 'services/auth/auth_gate.dart';
 import 'services/auth/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';

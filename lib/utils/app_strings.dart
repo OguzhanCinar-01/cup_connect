@@ -3,5 +3,6 @@ class AppStr{
   static const String sizeButtonTitleMedium = 'Medium';
   static const String sizeButtonTitleLarge = 'Large';
   static const String aboutProduct = 'About the product';
+  static const String orderNow = 'Order Now';
 
 }

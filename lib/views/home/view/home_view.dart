@@ -1,10 +1,8 @@
-import 'package:coffee_shop/navigation/navigation_manager.dart';
-import 'package:coffee_shop/services/auth/login_or_register.dart';
-
+import 'package:coffee_shop/utils/app_styles.dart';
+import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../utils/app_colors.dart';
-import '../viewmodel/home_view_model.dart';
 import '../widget/home_view_app_bar.dart';
 import '../widget/my_tab.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +16,9 @@ part 'dessert_tab.dart';
 part 'hot_coffee_tab.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key,});
-
+  const HomeView({
+    super.key,
+  });
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -39,10 +38,11 @@ class _HomeViewState extends State<HomeView> {
   ];
   void signOut() {
     ///get auth service
-    final AuthService authService = Provider.of<AuthService>(context, listen: false);
+    final AuthService authService =
+        Provider.of<AuthService>(context, listen: false);
+
     ///Logout
-    authService.signOut();
-    
+    authService.signOut(); 
   }
 
   @override
@@ -56,7 +56,7 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ///logout button
-            IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),
+            /*IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),*/
             const Divider(
               color: Colors.black,
               thickness: 0.2,
@@ -68,11 +68,7 @@ class _HomeViewState extends State<HomeView> {
               margin: const EdgeInsets.only(top: 20, left: 35),
               child: Text(
                 'Good morning, User',
-                style: GoogleFonts.poppins(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w200,
-                  color: Colors.black,
-                ),
+                style: AppStyle.titleTextStyle,
               ),
             ),
             20.h,
@@ -126,98 +122,16 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-
-            /// BottomNavigationBar
           ],
         ),
-        bottomNavigationBar: Container(
-          height: 100,
-          color: AppColors.surface,
-          child: Consumer<HomeViewModel>(
-            builder: (context, homeViewModel, child) {
-              return Row(
-                children: [
-                  _NavbarItem(
-                    homeRounded: Icons.home_rounded,
-                    data: 'Home',
-                    onTap: () => homeViewModel.setIndex(0),
-                    isSelected: homeViewModel.currentIndex == 0,
-                  ),
-                  _NavbarItem(
-                    homeRounded: Icons.receipt_long,
-                    data: 'Orders',
-                    onTap: () => homeViewModel.setIndex(1),
-                    isSelected: homeViewModel.currentIndex == 1,
-                  ),
-                  _NavbarItem(
-                    homeRounded: Icons.shopping_cart_rounded,
-                    data: 'Cart',
-                    onTap: () => homeViewModel.setIndex(2),
-                    isSelected: homeViewModel.currentIndex == 2,
-                  ),
-                  _NavbarItem(
-                    homeRounded: Icons.person,
-                    data: 'Profile',
-                    onTap: () => homeViewModel.setIndex(3),
-                    isSelected: homeViewModel.currentIndex == 3,
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+
+        /// BottomNavigationBar
+        bottomNavigationBar: const BottomNavBar(),
       ),
     );
   }
 }
 
-class _NavbarItem extends StatelessWidget {
-  const _NavbarItem({
-    required this.isSelected,
-    required this.homeRounded,
-    required this.data,
-    required this.onTap,
-  });
-
-  final bool isSelected;
-  final IconData homeRounded;
-  final String data;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Container(
-              height: 3,
-              width: 40,
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            15.h,
-            Icon(
-              homeRounded,
-              color: isSelected ? AppColors.primary : Colors.grey,
-              size: 30,
-            ),
-            Text(
-              data,
-              style: GoogleFonts.poppins(
-                color: isSelected ? AppColors.primary : Colors.grey,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 // Depricated Feature
 
