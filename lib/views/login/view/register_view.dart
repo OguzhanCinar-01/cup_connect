@@ -19,33 +19,44 @@ class _RegisterViewState extends State<RegisterView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final nameController = TextEditingController();
+  final surnameController = TextEditingController();
 
   /// Sign Up Function
   void signUp() async {
     if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password does not match'),
-        ),
-      );
+      showDialog(
+          context: context,
+          builder: (context) => const AlertDialog(
+                title: Text('Passwords do not match!'),
+              ));
       return;
     }
 
     /// get authservice
     final authService = Provider.of<AuthService>(context, listen: false);
     try {
-      await authService.signUpWithEmailAndPassword(
+      final userCredential = await authService.signUpWithEmailAndPassword(
         emailController.text,
         passwordController.text,
       );
+
+      /// if the user is successfully created, create a new document in the users collection
+      if (userCredential.user != null) {
+        await authService.addUserDetails(
+          nameController.text,
+          surnameController.text,
+          emailController.text,
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
+      if (mounted) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text(e.toString()),
+                ));
+      }
     }
   }
 
@@ -74,6 +85,28 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ),
                 15.h,
+
+                Row(
+                  children: [
+                    ///Name Textfield
+                    MyTextField(
+                      controller: nameController,
+                      hint: 'Name',
+                      isPassword: false,
+                      width: 180,
+                    ),
+                    10.w,
+
+                    ///Surname Textfield
+                    MyTextField(
+                      controller: surnameController,
+                      hint: 'Surname',
+                      isPassword: false,
+                      width: 180,
+                    )
+                  ],
+                ),
+                10.h,
 
                 /// Email Textfield
                 MyTextField(

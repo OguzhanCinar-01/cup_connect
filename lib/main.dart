@@ -4,7 +4,6 @@ import 'services/auth/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'notifier/provider_manager.dart';
 
 void main() async {

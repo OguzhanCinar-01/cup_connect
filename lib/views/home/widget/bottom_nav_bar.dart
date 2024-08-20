@@ -31,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
                 onTap: () {
                   homeViewModel.setIndex(0);
                   NavigationManager.instance
-                      .navigateToPage(const HomeView());
+                      .navigateToPageClear(const HomeView());
                 },
                 isSelected: homeViewModel.currentIndex == 0,
               ),
@@ -41,7 +41,7 @@ class BottomNavBar extends StatelessWidget {
                 onTap: () {
                   homeViewModel.setIndex(1);
                   NavigationManager.instance
-                      .navigateToPage(const OrderView());
+                      .navigateToPageClear(const OrderView());
                 },
                 isSelected: homeViewModel.currentIndex == 1,
               ),
@@ -51,7 +51,7 @@ class BottomNavBar extends StatelessWidget {
                 onTap: () {
                   homeViewModel.setIndex(2);
                   NavigationManager.instance
-                      .navigateToPage(const CartView());
+                      .navigateToPageClear(const CartView());
                 },
                 isSelected: homeViewModel.currentIndex == 2,
               ),
@@ -61,7 +61,7 @@ class BottomNavBar extends StatelessWidget {
                 onTap: () {
                   homeViewModel.setIndex(3);
                   NavigationManager.instance
-                      .navigateToPage(const ProfileView());
+                      .navigateToPageClear(const ProfileView());
                 },
                 isSelected: homeViewModel.currentIndex == 3,
               ),

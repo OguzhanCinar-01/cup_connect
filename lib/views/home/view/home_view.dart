@@ -1,5 +1,9 @@
+import 'package:coffee_shop/navigation/navigation_manager.dart';
+import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../utils/app_colors.dart';
@@ -34,19 +38,33 @@ class _HomeViewState extends State<HomeView> {
       iconPath: 'assets/images/cold_coffee.png',
       title: 'Cold Coffee',
     ),
-    const MyTab(iconPath: 'assets/images/dessert.png', title: 'Dessert'),
+    const MyTab(
+      iconPath: 'assets/images/dessert.png',
+      title: 'Dessert',
+    ),
   ];
   void signOut() {
-    ///get auth service
-    final AuthService authService =
-        Provider.of<AuthService>(context, listen: false);
+    try {
+      ///Get auth service
+      final AuthService authService =
+          Provider.of<AuthService>(context, listen: false);
 
-    ///Logout
-    authService.signOut(); 
+      ///Logout
+      authService.signOut();
+
+      ///Navigate to AuthGate
+      NavigationManager.instance.navigateToPageClear(const AuthGate());
+
+      print('Sign-out successful');
+    } catch (e) {
+      print("Sign-out failed: $e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    String? userId = FirebaseAuth.instance.currentUser!.uid;
+
     return DefaultTabController(
       length: myTabs.length,
       child: Scaffold(
@@ -56,21 +74,37 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ///logout button
-            /*IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),*/
+            IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),
             const Divider(
               color: Colors.black,
               thickness: 0.2,
             ),
 
             /// Good morning text
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(top: 20, left: 35),
-              child: Text(
-                'Good morning, User',
-                style: AppStyle.titleTextStyle,
-              ),
+            FutureBuilder(
+              future: Provider.of<AuthService>(context).getUserName(userId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  return const Text('Error');
+                }
+
+                String name = (snapshot.data ?? 'User').toLowerCase();
+                name = name[0].toUpperCase() + name.substring(1);
+
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 20, left: 35),
+                  child: Text(
+                    'Good morning, $name',
+                    style: AppStyle.titleTextStyle,
+                  ),
+                );
+              },
             ),
+
             20.h,
 
             /// Search bar

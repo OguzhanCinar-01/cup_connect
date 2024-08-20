@@ -41,7 +41,7 @@ class CoffeeGridItem extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 22),
                 child: Image.asset(
                   imagePath,
-                  height: 90,
+                  height: 75,
                   width: 130,
                 ),
               ),
@@ -57,13 +57,20 @@ class CoffeeGridItem extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
+
+              /// Description
+              /*Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(description, style: GoogleFonts.lato(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,  
-                ),),
-              ),
+                child: Text(
+                  description,
+                  style: GoogleFonts.lato(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),*/
+
+              /// Price
               Padding(
                 padding: const EdgeInsets.only(
                   left: 12,
@@ -80,10 +87,11 @@ class CoffeeGridItem extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
+                    /// FAB
                     FloatingActionButton(
                       onPressed: () {
                         /// When tapped, add the item to the cart
-                        /// 
+                        ///
                       },
                       backgroundColor: AppColors.primary,
                       elevation: 0,
