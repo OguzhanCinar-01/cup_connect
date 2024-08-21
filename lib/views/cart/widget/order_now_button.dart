@@ -8,27 +8,25 @@ class OrderNowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      child: GestureDetector(
-        onTap: () {
-          /// Add items to orders screen
-        },
-        child: Container(
-          width: 250,
-          height: 55,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: AppColors.primary,
-          ),
-          child: Center(
-            child: Text(
-              AppStr.orderNow,
-              style: GoogleFonts.poppins(
-                fontSize: 22,
-                fontWeight: FontWeight.w500,
-                color: AppColors.onPrimary,
-              ),
+    return GestureDetector(
+      onTap: () {
+        /// Add items to orders screen
+      },
+      child: Container(
+        width: 250,
+        height: 65,
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: AppColors.primary,
+        ),
+        child: Center(
+          child: Text(
+            AppStr.orderNow,
+            style: GoogleFonts.poppins(
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              color: AppColors.onPrimary,
             ),
           ),
         ),

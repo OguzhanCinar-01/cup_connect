@@ -12,4 +12,14 @@ class AppStyle {
     fontWeight: FontWeight.w300,
     color: Colors.black,
   );
+  static final TextStyle productTitle = GoogleFonts.poppins(
+    fontSize: 25,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+  );
+  static final TextStyle description = GoogleFonts.poppins(
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+  );
 }

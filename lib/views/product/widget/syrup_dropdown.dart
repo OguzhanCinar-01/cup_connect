@@ -15,8 +15,8 @@ class SyrupDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final syrupProvider = Provider.of<SyrupModel>(context);
     return DropdownButton<String>(
-      elevation: 16,
-      isExpanded: false,
+      elevation: 8,
+       isExpanded: false,
       underline: Container(
         height: 2,
         color: Colors.black,
@@ -32,7 +32,6 @@ class SyrupDropdown extends StatelessWidget {
         if (newSyrup != null) {
           syrupProvider.selectSyrup(newSyrup);
         }
-        print(syrupProvider.selectedSyrup);
       },
     );
   }

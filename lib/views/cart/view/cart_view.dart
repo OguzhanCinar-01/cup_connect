@@ -46,18 +46,18 @@ class _CartViewState extends State<CartView> {
           /// Subtotal
           Text('Subtotal: 30.00\$',
               style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: 17,
                 fontWeight: FontWeight.w400,
               )),
 
           /// Tax
           Text('Tax: 0.50\$',
               style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: 17,
                 fontWeight: FontWeight.w400,
               )),
 
-          /// Divier
+          /// Divider
           const Divider(
             indent: 100,
             endIndent: 100,

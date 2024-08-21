@@ -1,3 +1,6 @@
+import 'package:coffee_shop/views/cart/view/cart_view.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
+import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/syrup_model.dart';
 import 'package:provider/provider.dart';
@@ -19,5 +22,7 @@ class ProviderManager {
     ChangeNotifierProvider(create: (context) => HomeViewModel()),
     ChangeNotifierProvider(create: (context) => SizeButtonModel()),
     ChangeNotifierProvider(create: (context) => SyrupModel()),
+    ChangeNotifierProvider(create: (contex) => ProductViewModel()),
+    ChangeNotifierProvider(create: (context) => OrderViewModel()),
   ];
 }

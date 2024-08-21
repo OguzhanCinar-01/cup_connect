@@ -3,8 +3,10 @@ import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/home_view_app_bar.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:coffee_shop/views/orders/widget/my_timeline_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class OrderView extends StatefulWidget {
   const OrderView({super.key});
@@ -16,6 +18,8 @@ class OrderView extends StatefulWidget {
 class _OrderViewState extends State<OrderView> {
   @override
   Widget build(BuildContext context) {
+
+    final order = Provider.of<OrderViewModel>(context).orders;
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: const HomeViewAppBar(),

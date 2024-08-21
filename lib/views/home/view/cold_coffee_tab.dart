@@ -29,7 +29,8 @@ class ColdCoffeeTab extends StatelessWidget {
                   imagePath: 'assets/images/hot_cappucino.png',
                   title: coldCoffee['coffee_name'] ?? 'Unknown',
                   price: coldCoffee['price'] as double,
-                  description: coldCoffee['description'] ?? 'Classic',
+                  description: coldCoffee['descriptions'] ?? 'Classic',
+                  coffeSize: coldCoffee['coffee_size'],
                 );
               },
             );

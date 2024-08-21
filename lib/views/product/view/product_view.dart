@@ -1,15 +1,20 @@
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
-import 'package:coffee_shop/views/product/widget/add_to_cart_button.dart';
+import 'package:coffee_shop/utils/app_styles.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
+import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
 import 'package:coffee_shop/views/product/widget/go_back_button.dart';
 import 'package:coffee_shop/views/product/widget/size_button.dart';
 import 'package:coffee_shop/views/product/widget/syrup_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ProductView extends StatefulWidget {
-  const ProductView({super.key});
+  const ProductView({
+    super.key,
+  });
 
   @override
   State<ProductView> createState() => _ProductViewState();
@@ -18,6 +23,18 @@ class ProductView extends StatefulWidget {
 class _ProductViewState extends State<ProductView> {
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<ProductViewModel>(context).selectedProduct;
+
+    if (product == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('No Product Selected'),
+        ),
+        body: const Center(
+          child: Text('No product selected.'),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.surface,
       body: SafeArea(
@@ -28,89 +45,141 @@ class _ProductViewState extends State<ProductView> {
             const GoBackButton(),
 
             /// Product image
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Container(
-                width: double.infinity,
-                color: Colors.grey.shade200,
-                child: Image.asset(
-                  'assets/images/hot_cappucino.png',
-                  width: 300,
-                  height: 300,
-                ),
-              ),
-            ),
+            _productImage(context, product),
             10.h,
 
-            ///Coffee Size Text
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                'Coffee Size',
-                style: GoogleFonts.lato(
-                  color: AppColors.onSurface,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            20.h,
+            /// Product name
+            _productName(context, product),
 
             ///Size Selector
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizeButton(
-                  index: 0,
-                  sizeButtonTitle: AppStr.sizeButtonTitleSmall,
-                ),
-                SizeButton(
-                  index: 1,
-                  sizeButtonTitle: AppStr.sizeButtonTitleMedium,
-                ),
-                SizeButton(
-                  index: 2,
-                  sizeButtonTitle: AppStr.sizeButtonTitleLarge,
-                ),
-              ],
-            ),
+            if (product.coffeeSize.isNotEmpty) _sizeSelector(),
 
-            ///About the product
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 40, bottom: 20),
-                  child: Text(
-                    AppStr.aboutProduct,
-                    style: GoogleFonts.lato(
-                      color: AppColors.onSurface,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 10),
-                  child: SyrupDropdown(),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                  'This is a hot cappuccino. It is made from the finest coffee beans and milk. It is a perfect drink for a cold day.',
-                  style: GoogleFonts.lato(
-                    color: AppColors.onSurface,
-                    fontSize: 16,
-                  )),
-            ),
+            ///About the product and syrup dropdown
+            _aboutProduct(),
+
+            ///Product description
+            _productDescription(context, product),
+            const Spacer(),
 
             ///Add to cart button
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 80, vertical: 60),
-              child: AddToCartButton(),
-            ),
+            _addToCartButton(product),
           ],
+        ),
+      ),
+    );
+  }
+
+  Container _productImage(BuildContext context, Product product) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      height: MediaQuery.of(context).size.height * 0.33,
+      width: MediaQuery.of(context).size.width * 0.90,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        image: DecorationImage(
+          image: AssetImage(product.imagePath),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _productName(BuildContext context, Product product) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: MediaQuery.of(context).size.width > 600
+          ? const EdgeInsets.symmetric(horizontal: 100)
+          : const EdgeInsets.symmetric(horizontal: 40),
+      child: Text(
+        product.name,
+        style: AppStyle.productTitle,
+      ),
+    );
+  }
+
+  Widget _sizeSelector() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SizeButton(
+            index: 0,
+            sizeButtonTitle: AppStr.sizeButtonTitleSmall,
+          ),
+          SizeButton(
+            index: 1,
+            sizeButtonTitle: AppStr.sizeButtonTitleMedium,
+          ),
+          SizeButton(
+            index: 2,
+            sizeButtonTitle: AppStr.sizeButtonTitleLarge,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _productDescription(BuildContext context, Product product) {
+    return Padding(
+      padding: MediaQuery.of(context).size.width > 600
+          ? const EdgeInsets.symmetric(horizontal: 100)
+          : const EdgeInsets.symmetric(horizontal: 40),
+      child: Text(
+        product.description,
+        style: AppStyle.description,
+        maxLines: 7,
+      ),
+    );
+  }
+
+  Widget _aboutProduct() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Row(
+        children: [
+          Text(
+            AppStr.aboutProduct,
+            style: AppStyle.orderTextStyle,
+          ),
+          const Spacer(),
+          SyrupDropdown(),
+        ],
+      ),
+    );
+  }
+
+  Widget _addToCartButton(Product product) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 80, right: 80),
+      child: GestureDetector(
+        onTap: () {
+          /// Add items to orders screen
+          final order = Order(
+            productName: product.name,
+            price: product.price,
+            size: product.coffeeSize[0],
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          alignment: Alignment.center,
+          width: 300,
+          height: 70,
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Text(
+            /// Product price will be added here
+            'Add to Cart  |   \$ ${product.price.toStringAsFixed(2)}',
+            style: GoogleFonts.lato(
+              color: AppColors.surface,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
         ),
       ),
     );

@@ -9,7 +9,7 @@ class DessertTab extends StatelessWidget {
         future: Provider.of<AuthService>(context).getDessertData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: MyCircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -25,11 +25,13 @@ class DessertTab extends StatelessWidget {
               itemCount: dessertList.length,
               itemBuilder: (context, index) {
                 final dessert = dessertList[index];
+                print(dessert['description']);
                 return CoffeeGridItem(
-                  imagePath: 'assets/images/dessert_brownie.png',
+                  imagePath: 'assets/images/dessert_${dessert['imgPath']}.png',
                   title: dessert['dessert_name'] ?? 'Unknown',
                   price: dessert['price'] as double,
-                  description: dessert['description'] ?? 'Classic',
+                  description: dessert['descriptions'] ?? '',
+                  coffeSize: dessert['dessert_size'] ?? '',
                 );
               },
             );

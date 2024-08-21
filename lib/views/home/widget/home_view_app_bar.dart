@@ -12,7 +12,7 @@ class HomeViewAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Container(
         color: AppColors.surface,
         width: double.infinity,
-        height: 70,
+        height: MediaQuery.of(context).size.height * 0.09,
         child: Padding(
           padding: const EdgeInsets.only(
             top: 30,
@@ -26,7 +26,6 @@ class HomeViewAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.black,
               ),
               80.w,
-
               ///Notification icon
               const Icon(
                 Icons.notifications_none,

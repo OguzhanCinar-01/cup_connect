@@ -3,6 +3,7 @@ part of 'home_view.dart';
 class _HotCoffeeTab extends StatelessWidget {
   const _HotCoffeeTab();
 
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -28,8 +29,10 @@ class _HotCoffeeTab extends StatelessWidget {
                 return CoffeeGridItem(
                   imagePath: 'assets/images/hot_cappucino.png',
                   title: hotCoffee['coffee_name'] ?? 'Unknown',
-                  price: hotCoffee['price'] as double,
-                  description: hotCoffee['description'] ?? 'Classic',
+                  price: (hotCoffee['price'] as double),
+                  description: hotCoffee['descriptions'] ?? 'No Data',
+                  coffeSize: hotCoffee['coffee_size'],
+                  
                 );
               },
             );
