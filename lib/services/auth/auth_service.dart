@@ -81,6 +81,22 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  Future<String> getUserSurname(String userId) async {
+    try {
+      DocumentSnapshot doc =
+          await _firestore.collection('users').doc(userId).get();
+      if (doc.exists) {
+        return doc['surname'] as String;
+      } else {
+        print("No user data found for the given user ID.");
+        return '';
+      }
+    } catch (e) {
+      print("Error fetching user surname: $e");
+      return '';
+    }
+  }
+
   /// Add coffee to firestore
   /*Future<void> addDessertData() async {
     List<Map<String, dynamic>> coffeeList = [

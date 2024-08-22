@@ -66,7 +66,7 @@ class CartAddedItems extends StatelessWidget {
                       children: [
                         /// Flavor
                         Text(
-                          order.syrup ?? 'No flavor',
+                          order.syrup,
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             fontWeight: FontWeight.w300,

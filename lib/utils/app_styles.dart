@@ -1,3 +1,4 @@
+import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -31,5 +32,10 @@ class AppStyle {
     fontSize: 17,
     fontWeight: FontWeight.w300,
     color: Colors.black,
+  );
+  static final TextStyle profileText = GoogleFonts.poppins(
+    fontSize: 22,
+    fontWeight: FontWeight.w300,
+    color: AppColors.onPrimary,
   );
 }

@@ -1,5 +1,3 @@
-import 'package:coffee_shop/navigation/navigation_manager.dart';
-import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
@@ -44,23 +42,6 @@ class _HomeViewState extends State<HomeView> {
       title: 'Dessert',
     ),
   ];
-  void signOut() {
-    try {
-      ///Get auth service
-      final AuthService authService =
-          Provider.of<AuthService>(context, listen: false);
-
-      ///Logout
-      authService.signOut();
-
-      ///Navigate to AuthGate
-      NavigationManager.instance.navigateToPageClear(const AuthGate());
-
-      print('Sign-out successful');
-    } catch (e) {
-      print("Sign-out failed: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +55,6 @@ class _HomeViewState extends State<HomeView> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ///logout button
-            IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),
             const Divider(
               color: Colors.black,
               thickness: 0.2,
@@ -87,9 +66,7 @@ class _HomeViewState extends State<HomeView> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: MyCircularProgressIndicator(
-                      
-                    ),
+                    child: MyCircularProgressIndicator(),
                   );
                 }
                 if (snapshot.hasError) {
@@ -98,6 +75,7 @@ class _HomeViewState extends State<HomeView> {
 
                 String name = (snapshot.data ?? 'User').toLowerCase();
                 name = name[0].toUpperCase() + name.substring(1);
+
                 /// Good morning text
                 return _goodMorningText(name);
               },
@@ -111,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
 
             /// TabBar
             _tabBar(context),
-            
+
             /// TabBarView
             _tabBarView(),
           ],
@@ -125,69 +103,69 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _goodMorningText(String name) {
     return Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 20, left: 35),
-                child: Text(
-                  '${AppStr.goodMorning}, $name',
-                  style: AppStyle.titleTextStyle,
-                ),
-              );
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 20, left: 35),
+      child: Text(
+        '${AppStr.goodMorning}, $name',
+        style: AppStyle.titleTextStyle,
+      ),
+    );
   }
 
   Widget _tabBarView() {
     return const Expanded(
-            child: TabBarView(
-              children: [
-                _HotCoffeeTab(),
-                ColdCoffeeTab(),
-                DessertTab(),
-              ],
-            ),
-          );
+      child: TabBarView(
+        children: [
+          _HotCoffeeTab(),
+          ColdCoffeeTab(),
+          DessertTab(),
+        ],
+      ),
+    );
   }
 
   Widget _tabBar(BuildContext context) {
     return Padding(
-            padding: MediaQuery.of(context).size.width > 600
-                ? const EdgeInsets.symmetric(horizontal: 100)
-                : const EdgeInsets.symmetric(horizontal: 15),
-            child: TabBar(
-              indicator: const UnderlineTabIndicator(
-                borderSide: BorderSide(
-                  color: AppColors.primary,
-                  width: 4,
-                ),
-              ),
-              labelColor: AppColors.primary,
-              indicatorWeight: 3,
-              tabs: myTabs,
-            ),
-          );
+      padding: MediaQuery.of(context).size.width > 600
+          ? const EdgeInsets.symmetric(horizontal: 100)
+          : const EdgeInsets.symmetric(horizontal: 15),
+      child: TabBar(
+        indicator: const UnderlineTabIndicator(
+          borderSide: BorderSide(
+            color: AppColors.primary,
+            width: 4,
+          ),
+        ),
+        labelColor: AppColors.primary,
+        indicatorWeight: 3,
+        tabs: myTabs,
+      ),
+    );
   }
 
   Widget _searchBar(BuildContext context) {
     return Container(
-            margin: MediaQuery.of(context).size.width > 600
-                ? const EdgeInsets.symmetric(horizontal: 100)
-                : const EdgeInsets.symmetric(horizontal: 30),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: AppStr.searchHintText,
-                hintStyle: AppStyle.orderTextStyle,
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  borderSide: BorderSide(color: AppColors.onSecondary, width: 0.5),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade100,
-                  ),
-                ),
-                prefixIcon: const Icon(Icons.search),
-              ),
+      margin: MediaQuery.of(context).size.width > 600
+          ? const EdgeInsets.symmetric(horizontal: 100)
+          : const EdgeInsets.symmetric(horizontal: 30),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: AppStr.searchHintText,
+          hintStyle: AppStyle.orderTextStyle,
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: AppColors.onSecondary, width: 0.5),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(
+              color: Colors.grey.shade100,
             ),
-          );
+          ),
+          prefixIcon: const Icon(Icons.search),
+        ),
+      ),
+    );
   }
 }
 
