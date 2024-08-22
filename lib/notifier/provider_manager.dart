@@ -1,4 +1,3 @@
-import 'package:coffee_shop/views/cart/view/cart_view.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';

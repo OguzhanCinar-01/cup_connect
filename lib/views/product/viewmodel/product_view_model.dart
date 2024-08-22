@@ -6,14 +6,16 @@ class Product {
     required this.description,
     required this.price,
     required this.imagePath,
-    required this.coffeeSize,
+    this.coffeeSize = 'Small',
+    this.syrup = 'None',
   });
 
   final String name;
   final String description;
   final double price;
   final String imagePath;
-  final String coffeeSize;
+  String coffeeSize;
+  String syrup;
 }
 
 class ProductViewModel with ChangeNotifier {

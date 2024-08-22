@@ -69,7 +69,7 @@ class _ProductViewState extends State<ProductView> {
     );
   }
 
-  Container _productImage(BuildContext context, Product product) {
+  Widget _productImage(BuildContext context, Product product) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       height: MediaQuery.of(context).size.height * 0.33,
@@ -161,6 +161,8 @@ class _ProductViewState extends State<ProductView> {
             price: product.price,
             size: product.coffeeSize[0],
           );
+
+          Provider.of<OrderViewModel>(context, listen: false).addOrder(order);
         },
         child: Container(
           margin: const EdgeInsets.only(bottom: 20),

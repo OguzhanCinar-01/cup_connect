@@ -1,36 +1,46 @@
-
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/views/cart/widget/quantity_button.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CartAddedItems extends StatelessWidget {
   const CartAddedItems({
     super.key,
+    required this.orders,
   });
+
+  final List<Order> orders;
 
   @override
   Widget build(BuildContext context) {
+    final orderViewModel = Provider.of<OrderViewModel>(context);
+
+    /// Added items Container
     return Container(
       width: double.infinity,
-      height: 450,
+      height: 420,
       padding: const EdgeInsets.only(top: 25),
       child: ListView.separated(
-        itemCount: 10,
+        itemCount: orders.length,
         separatorBuilder: (context, index) => const SizedBox(height: 15),
         itemBuilder: (context, index) {
+          final order = orders[index];
           return Dismissible(
             key: UniqueKey(),
             direction: DismissDirection.endToStart,
             background: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.red,
+                color: AppColors.error,
               ),
               alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: const Icon(Icons.delete, color: Colors.white),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Icon(Icons.delete, color: AppColors.onPrimary),
             ),
             onDismissed: (direction) {
+              orderViewModel.removeOrder(order);
             },
             child: Card(
               color: AppColors.secondary,
@@ -45,7 +55,7 @@ class CartAddedItems extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      'Latte',
+                      order.productName,
                       style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
@@ -56,25 +66,24 @@ class CartAddedItems extends StatelessWidget {
                       children: [
                         /// Flavor
                         Text(
-                          'Vanilla',
+                          order.syrup ?? 'No flavor',
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             fontWeight: FontWeight.w300,
                           ),
                         ),
-    
+
                         /// Size
                         Text(
-                          'Medium',
+                          order.size ?? 'No size',
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             fontWeight: FontWeight.w300,
                           ),
                         ),
-    
                         /// Price
                         Text(
-                          'Price: 10\$',
+                          '\$${order.price.toStringAsFixed(2)}',
                           style: GoogleFonts.poppins(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -82,24 +91,9 @@ class CartAddedItems extends StatelessWidget {
                         ),
                       ],
                     ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove, size: 30),
-                          onPressed: () {
-                            /// Decrease item count
-                          },
-                        ),
-                        const Text('3', style: TextStyle(fontSize: 15)),
-                        IconButton(
-                          icon: const Icon(Icons.add, size: 30,),
-                          onPressed: () {
-                            /// Increase item count
-                          },
-                        ),
-                      ],
-                    ),
+
+                    /// Quantity Buttons
+                    trailing: _quantityButtons(orderViewModel, order),
                   ),
                 ],
               ),
@@ -108,5 +102,28 @@ class CartAddedItems extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget _quantityButtons(OrderViewModel orderViewModel, Order order) {
+    return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /// Minus Button
+                      QuantityButtons(
+                        icon: Icons.remove,
+                        onPressed: () =>
+                            orderViewModel.decreaseQuantity(order),
+                      ),
+
+                      Text(order.quantity.toString(),
+                          style: const TextStyle(fontSize: 15)),
+
+                      /// Plus Button
+                      QuantityButtons(
+                          icon: Icons.add,
+                          onPressed: () =>
+                              orderViewModel.increaseQuantity(order)),
+                    ],
+                  );
   }
 }

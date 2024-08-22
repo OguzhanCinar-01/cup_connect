@@ -9,4 +9,5 @@ class AppColors {
 
   static const Color surface = Color(0xFFF8F4E1);
   static const Color onSurface = Colors.black;
+  static Color error = Colors.red.shade900;
 }

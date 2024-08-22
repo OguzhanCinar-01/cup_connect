@@ -25,13 +25,11 @@ class DessertTab extends StatelessWidget {
               itemCount: dessertList.length,
               itemBuilder: (context, index) {
                 final dessert = dessertList[index];
-                print(dessert['description']);
                 return CoffeeGridItem(
                   imagePath: 'assets/images/dessert_${dessert['imgPath']}.png',
                   title: dessert['dessert_name'] ?? 'Unknown',
                   price: dessert['price'] as double,
                   description: dessert['descriptions'] ?? '',
-                  coffeSize: dessert['dessert_size'] ?? '',
                 );
               },
             );

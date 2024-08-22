@@ -5,7 +5,6 @@ import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/my_circular_progress_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
@@ -13,7 +12,6 @@ import '../../../utils/app_colors.dart';
 import '../widget/home_view_app_bar.dart';
 import '../widget/my_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../widget/coffee_grid_item.dart';
@@ -77,11 +75,11 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ///logout button
-            /*IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),
+            IconButton(onPressed: signOut, icon: const Icon(Icons.logout)),
             const Divider(
               color: Colors.black,
               thickness: 0.2,
-            ),*/
+            ),
 
             /// Good morning text
             FutureBuilder(

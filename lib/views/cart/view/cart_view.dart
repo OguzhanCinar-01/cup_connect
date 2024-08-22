@@ -5,8 +5,10 @@ import 'package:coffee_shop/views/cart/widget/cart_added_item.dart';
 import 'package:coffee_shop/views/cart/widget/order_now_button.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/home_view_app_bar.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
@@ -18,6 +20,12 @@ class CartView extends StatefulWidget {
 class _CartViewState extends State<CartView> {
   @override
   Widget build(BuildContext context) {
+    final orderViewModel = Provider.of<OrderViewModel>(context);
+    final orders = orderViewModel.orders;
+    final subtotal = orderViewModel.calculateSubTotal();
+    final tax = orderViewModel.calculateTax();
+    final total = orderViewModel.calculateTotal();
+
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: const HomeViewAppBar(),
@@ -40,18 +48,20 @@ class _CartViewState extends State<CartView> {
           ),
 
           /// Added items
-          const CartAddedItems(),
+          CartAddedItems(
+            orders: orders,
+          ),
           10.h,
 
           /// Subtotal
-          Text('Subtotal: 30.00\$',
+          Text('Subtotal: \$${subtotal.toStringAsFixed(2)}',
               style: GoogleFonts.poppins(
                 fontSize: 17,
                 fontWeight: FontWeight.w400,
               )),
 
           /// Tax
-          Text('Tax: 0.50\$',
+          Text('Tax: \$${tax.toStringAsFixed(2)}',
               style: GoogleFonts.poppins(
                 fontSize: 17,
                 fontWeight: FontWeight.w400,
@@ -68,7 +78,7 @@ class _CartViewState extends State<CartView> {
 
           /// Total
           Text(
-            'Total: 30.50\$',
+            'Total: \$${total.toStringAsFixed(2)}',
             style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.w500,

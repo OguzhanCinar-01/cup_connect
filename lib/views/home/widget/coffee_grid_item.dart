@@ -1,8 +1,9 @@
 import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_styles.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:coffee_shop/views/product/view/product_view.dart';
 import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../extensions/space_exs.dart';
@@ -15,7 +16,8 @@ class CoffeeGridItem extends StatelessWidget {
     required this.title,
     required this.price,
     required this.description,
-    required this.coffeSize,
+    this.coffeSize = 'Small',
+    this.syrup = 'None',
   });
 
   final String imagePath;
@@ -23,9 +25,11 @@ class CoffeeGridItem extends StatelessWidget {
   final double price;
   final String description;
   final String coffeSize;
+  final String syrup;
 
   @override
   Widget build(BuildContext context) {
+    final fixedPrice = price.toStringAsFixed(2);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: GestureDetector(
@@ -37,6 +41,7 @@ class CoffeeGridItem extends StatelessWidget {
             price: price,
             imagePath: imagePath,
             coffeeSize: coffeSize,
+            syrup: syrup,
           );
 
           Provider.of<ProductViewModel>(context, listen: false)
@@ -54,32 +59,13 @@ class CoffeeGridItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               2.h,
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 3),
-                  width: MediaQuery.of(context).size.width * 0.27,
-                  height: MediaQuery.of(context).size.height * 0.086,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(imagePath),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+
+              /// Image container
+              _imageContainer(context),
               5.h,
-              /// title
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  title,
-                  style: GoogleFonts.lato(
-                    color: AppColors.onSurface,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
+
+              /// Title
+              _productTitleText(),
 
               /// Description
               /* Padding(
@@ -91,43 +77,78 @@ class CoffeeGridItem extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-              ),*/ 
+              ),*/
 
               /// Price
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 12,
-                  right: 5,
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      '\$ $price',
-                      style: const TextStyle(
-                        color: AppColors.onSurface,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19,
-                      ),
-                    ),
-                    const Spacer(),
-
-                    /// FAB
-                    FloatingActionButton(
-                      onPressed: () {
-                        /// When tapped, add the item to the cart
-                        ///
-                      },
-                      backgroundColor: AppColors.primary,
-                      elevation: 0,
-                      mini: true,
-                      child: const Icon(Icons.add, color: AppColors.surface),
-                    ),
-                  ],
-                ),
-              ),
+              _priceText(fixedPrice, context),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _imageContainer(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.only(top: 3),
+        width: MediaQuery.of(context).size.width * 0.27,
+        height: MediaQuery.of(context).size.height * 0.095,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _productTitleText() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Text(
+        title,
+        style: AppStyle.priceTextStyle,
+      ),
+    );
+  }
+
+  Widget _priceText(String fixedPrice, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 12,
+        right: 5,
+      ),
+      child: Row(
+        children: [
+          Text(
+            '\$ $fixedPrice',
+            style: AppStyle.price,
+          ),
+
+          const Spacer(),
+
+          /// FAB
+          FloatingActionButton(
+            onPressed: () {
+              /// When tapped, add the item to the cart
+              final newOrder = Order(
+                productName: title,
+                price: price,
+                size: coffeSize,
+              );
+
+              // Add the order to OrderViewModel
+              Provider.of<OrderViewModel>(context, listen: false)
+                  .addOrder(newOrder);
+            },
+            backgroundColor: AppColors.primary,
+            elevation: 0,
+            mini: true,
+            child: const Icon(Icons.add, color: AppColors.surface),
+          ),
+        ],
       ),
     );
   }

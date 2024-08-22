@@ -22,4 +22,14 @@ class AppStyle {
     fontWeight: FontWeight.w300,
     color: Colors.black,
   );
+  static final TextStyle price = GoogleFonts.poppins(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: Colors.black,
+  );
+  static final TextStyle priceTextStyle = GoogleFonts.poppins(
+    fontSize: 17,
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+  );
 }
