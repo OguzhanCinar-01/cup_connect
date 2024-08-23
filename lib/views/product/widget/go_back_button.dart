@@ -1,6 +1,8 @@
 import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GoBackButton extends StatelessWidget {
   const GoBackButton({
@@ -20,9 +22,18 @@ class GoBackButton extends StatelessWidget {
           // color: AppColors.onPrimary,
         ),
         child: IconButton(
-            onPressed: () {
+            onPressed: () async {
               /// Go back to the previous page
               NavigationManager.instance.goBack();
+
+              /// Delay the reset of the selected size to avoid the animation
+              await Future.delayed(const Duration(milliseconds: 300));
+
+              /// Reset the selected size
+
+              // ignore: use_build_context_synchronously
+              Provider.of<SizeButtonModel>(context, listen: false)
+                  .resetSelectedSize();
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,

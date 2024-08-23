@@ -16,8 +16,8 @@ class CoffeeGridItem extends StatelessWidget {
     required this.title,
     required this.price,
     required this.description,
-    this.coffeSize = 'Small',
-    this.syrup = 'None',
+    this.coffeSize = '', /// Default size if not provided
+    this.syrup = 'None', /// Default syrup
   });
 
   final String imagePath;
@@ -43,6 +43,7 @@ class CoffeeGridItem extends StatelessWidget {
             coffeeSize: coffeSize,
             syrup: syrup,
           );
+          print('Selected Product: ${selectedProduct.coffeeSize}, ${selectedProduct.syrup}'); 
 
           Provider.of<ProductViewModel>(context, listen: false)
               .selectProduct(selectedProduct);

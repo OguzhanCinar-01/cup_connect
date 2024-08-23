@@ -6,8 +6,8 @@ class Product {
     required this.description,
     required this.price,
     required this.imagePath,
-    this.coffeeSize = 'Small',
-    this.syrup = 'None',
+    required this.coffeeSize,
+    required this.syrup,
   });
 
   final String name;
@@ -26,5 +26,21 @@ class ProductViewModel with ChangeNotifier {
   void selectProduct(Product product) {
     _selectedProduct = product;
     notifyListeners();
+  }
+
+  /// Update the product size
+  void updateProductSize(String size) {
+    if (_selectedProduct != null) {
+      _selectedProduct!.coffeeSize = size;
+      notifyListeners();
+    }
+  }
+
+  /// Update the product syrup
+  void updateProductSyrup(String syrup) {
+    if (_selectedProduct != null) {
+      _selectedProduct!.syrup = syrup;
+      notifyListeners();
+    }
   }
 }

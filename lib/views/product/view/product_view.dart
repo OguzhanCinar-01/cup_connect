@@ -101,20 +101,38 @@ class _ProductViewState extends State<ProductView> {
   Widget _sizeSelector() {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizeButton(
             index: 0,
             sizeButtonTitle: AppStr.sizeButtonTitleSmall,
+            onPressed: () {
+              Provider.of<ProductViewModel>(context, listen: false)
+                  .updateProductSize(AppStr.sizeButtonTitleSmall);
+            },
           ),
           SizeButton(
             index: 1,
             sizeButtonTitle: AppStr.sizeButtonTitleMedium,
+            onPressed: () {
+              Provider.of<ProductViewModel>(context, listen: false)
+                  .updateProductSize(AppStr.sizeButtonTitleMedium);
+            },
           ),
           SizeButton(
             index: 2,
             sizeButtonTitle: AppStr.sizeButtonTitleLarge,
+            onPressed: () {
+              Provider.of<ProductViewModel>(context, listen: false)
+                  .updateProductSize(AppStr.sizeButtonTitleLarge);
+              final updatedSize =
+                  Provider.of<ProductViewModel>(context, listen: false)
+                      .selectedProduct
+                      ?.coffeeSize;
+
+              print(updatedSize);
+            },
           ),
         ],
       ),
@@ -159,7 +177,8 @@ class _ProductViewState extends State<ProductView> {
           final order = Order(
             productName: product.name,
             price: product.price,
-            size: product.coffeeSize[0],
+            size: product.coffeeSize,
+            syrup: product.syrup,
           );
 
           Provider.of<OrderViewModel>(context, listen: false).addOrder(order);

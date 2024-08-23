@@ -1,3 +1,4 @@
+import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,9 +11,11 @@ class SizeButton extends StatelessWidget {
     super.key,
     required this.sizeButtonTitle,
     required this.index,
+    required this.onPressed,
   });
   final int index;
   final String sizeButtonTitle;
+  final Function()? onPressed;
 
   final double sizeButtonWidth = 100;
   final double sizeButtonHeight = 40;
@@ -26,6 +29,9 @@ class SizeButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         sizeButtonModel.setSelectedSize(index);
+        final productViewModel =
+            Provider.of<ProductViewModel>(context, listen: false);
+        productViewModel.updateProductSize(sizeButtonTitle);
       },
       child: Container(
         alignment: Alignment.center,
