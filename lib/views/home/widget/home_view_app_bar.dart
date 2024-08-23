@@ -1,3 +1,6 @@
+import 'package:coffee_shop/navigation/navigation_manager.dart';
+import 'package:coffee_shop/views/adminPanel/view/admin_panel_view.dart';
+
 import '../../../extensions/space_exs.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/cupconnect_logo.dart';
@@ -26,11 +29,18 @@ class HomeViewAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.black,
               ),
               80.w,
+
               ///Notification icon
-              const Icon(
-                Icons.notifications_none,
-                color: Colors.black,
-                size: 30,
+              GestureDetector(
+                onTap: () {
+                  NavigationManager.instance
+                      .navigateToPage(const AdminPanelView());
+                },
+                child: const Icon(
+                  Icons.notifications_none,
+                  color: Colors.black,
+                  size: 30,
+                ),
               ),
             ],
           ),

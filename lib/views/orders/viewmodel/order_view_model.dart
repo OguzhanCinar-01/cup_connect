@@ -89,6 +89,7 @@ class OrderViewModel extends ChangeNotifier {
     /// Generate a unique order ID
     var uuid = const Uuid();
     String orderID = uuid.v4();
+    orderID = orderID.substring(0, 8);
 
     try {
       // Adding order to the database with the orderID in this way
@@ -120,7 +121,7 @@ class OrderViewModel extends ChangeNotifier {
   }
 
   /// Get fetch orders
-  Future<void> fetchOrders() async {
+  /*Future<void> fetchOrders() async {
     final firestore = FirebaseFirestore.instance;
 
     try {
@@ -145,5 +146,5 @@ class OrderViewModel extends ChangeNotifier {
     } catch (e) {
       print('Error fetching orders: $e');
     }
-  }
+  }*/
 }
