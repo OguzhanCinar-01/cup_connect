@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class Order {
   Order({
     required this.productName,
-    this.syrup = 'None', 
+    this.syrup = 'None',
     this.size,
     required this.price,
     this.orderID,
@@ -75,9 +78,72 @@ class OrderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Set syrup for the order
-  void setSyrup(Order order, String syrup) {
-    order.syrup = syrup;
-    notifyListeners();
+  Future<void> submitOrder() async {
+    final firestore = FirebaseFirestore.instance;
+
+    /// Get the current date and time
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd/MM/yyyy').format(now);
+    String formattedTime = DateFormat('HH:mm').format(now);
+
+    /// Generate a unique order ID
+    var uuid = const Uuid();
+    String orderID = uuid.v4();
+
+    try {
+      // Adding order to the database with the orderID in this way
+      // allows us to easily query the order later
+      if (orders.isNotEmpty) {
+        await firestore.collection('orders').doc(orderID).set({
+          'orderID': orderID,
+          'orderDate': formattedDate,
+          'orderTime': formattedTime,
+          'orderStatus': 'Pending',
+          'order_items': orders
+              .map((order) => {
+                    'productName': order.productName,
+                    'syrup': order.syrup,
+                    'size': order.size,
+                    'price': order.price,
+                    'quantity': order.quantity,
+                  })
+              .toList(),
+        });
+
+        // Clear the orders list
+        orders.clear();
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error submitting order: $e');
+    }
+  }
+
+  /// Get fetch orders
+  Future<void> fetchOrders() async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot snapshot = await firestore.collection('orders').get();
+
+      orders = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        return Order(
+          productName: data['productName'] ?? 'No product name found',
+          syrup: data['syrup'] ?? 'No syrup found',
+          size: data['size'] ?? 'No size found',
+          price: data['price'] ?? 0.0,
+          orderID: data['orderID'] ?? 'No order ID found',
+          orderDate: data['orderDate'] ?? 'No order date found',
+          orderTime: data['orderTime'] ?? 'No order time found',
+          orderStatus: data['orderStatus'] ?? 'No order status found',
+          quantity: data['quantity'] ?? 0,
+        );
+      }).toList();
+
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching orders: $e');
+    }
   }
 }

@@ -144,7 +144,7 @@ class _ProfileViewState extends State<ProfileView> {
           10.h,
           MyCard(title: 'Previous Orders', icon: Icons.history, onTap: () {}),
           MyCard(title: 'Settings', icon: Icons.settings, onTap: () {}),
-          MyCard(title: 'Help', icon: Icons.help, onTap: () {}),
+          MyCard(title: 'About', icon: Icons.info, onTap: () {}),
           
         ],
       ),

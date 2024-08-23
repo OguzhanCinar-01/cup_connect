@@ -26,7 +26,6 @@ class MyCard extends StatelessWidget {
               ),
               leading: Icon(icon),
               onTap: () {
-                onTap();
               },
             ),
           ],

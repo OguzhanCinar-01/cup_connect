@@ -36,6 +36,7 @@ class _CartViewState extends State<CartView> {
             color: AppColors.onSecondary,
             thickness: 0.2,
           ),
+          /// Cart title
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
