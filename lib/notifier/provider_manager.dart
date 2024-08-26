@@ -1,9 +1,9 @@
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
+import 'package:coffee_shop/views/adminPanel/viewmodel/card_view_model.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/syrup_model.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import '../services/auth/auth_service.dart';
@@ -26,5 +26,6 @@ class ProviderManager {
     ChangeNotifierProvider(create: (contex) => ProductViewModel()),
     ChangeNotifierProvider(create: (context) => OrderViewModel()),
     ChangeNotifierProvider(create: (context) => AdminPanelViewModel()),
+    ChangeNotifierProvider(create: (context) => CardModel()),
   ];
 }

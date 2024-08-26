@@ -38,4 +38,19 @@ class AppStyle {
     fontWeight: FontWeight.w300,
     color: AppColors.onPrimary,
   );
+  static final TextStyle orderDetailsText = GoogleFonts.lato(
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+  static final TextStyle orderDetailsProduct = GoogleFonts.lato(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+  static final TextStyle orderDetailsPrice = GoogleFonts.lato(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
 }

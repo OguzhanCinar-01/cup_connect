@@ -86,7 +86,8 @@ class _ProductViewState extends State<ProductView> {
 
   Widget _productName(BuildContext context, Product product) {
     return Container(
-      width: double.infinity,
+      color: Colors.red,
+      width: MediaQuery.of(context).size.width * 0.73,
       margin: const EdgeInsets.symmetric(vertical: 20),
       padding: MediaQuery.of(context).size.width > 600
           ? const EdgeInsets.symmetric(horizontal: 100)
@@ -94,6 +95,7 @@ class _ProductViewState extends State<ProductView> {
       child: Text(
         product.name,
         style: AppStyle.productTitle,
+        maxLines: 2,
       ),
     );
   }
@@ -179,6 +181,22 @@ class _ProductViewState extends State<ProductView> {
             price: product.price,
             size: product.coffeeSize,
             syrup: product.syrup,
+          );
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your order added to cart'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           );
 
           Provider.of<OrderViewModel>(context, listen: false).addOrder(order);

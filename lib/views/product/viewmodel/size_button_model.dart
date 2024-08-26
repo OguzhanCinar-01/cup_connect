@@ -9,6 +9,7 @@ class SizeButtonModel with ChangeNotifier {
     _selectedSize = index;
     notifyListeners();
   }
+
   void resetSelectedSize() {
     _selectedSize = 0;
     notifyListeners();

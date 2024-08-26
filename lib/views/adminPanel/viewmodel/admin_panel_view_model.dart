@@ -12,4 +12,6 @@ class AdminPanelViewModel extends ChangeNotifier {
       return []; // Hata durumunda boş liste döner
     }
   }
+
+  
 }

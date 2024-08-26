@@ -1,6 +1,7 @@
 import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';
+import 'package:coffee_shop/views/product/viewmodel/syrup_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,10 +31,13 @@ class GoBackButton extends StatelessWidget {
               await Future.delayed(const Duration(milliseconds: 300));
 
               /// Reset the selected size
-
               // ignore: use_build_context_synchronously
               Provider.of<SizeButtonModel>(context, listen: false)
                   .resetSelectedSize();
+              /// Reset the selected syrup    
+              // ignore: use_build_context_synchronously
+              Provider.of<SyrupModel>(context, listen: false)
+                  .selectSyrup('None');
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,
