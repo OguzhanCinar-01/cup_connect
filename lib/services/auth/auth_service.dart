@@ -97,60 +97,6 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  /// Add coffee to firestore
-  /*Future<void> addDessertData() async {
-    List<Map<String, dynamic>> coffeeList = [
-      {
-        'dessert_name': 'Chocolate Cake',
-        'price': 7.0,
-        'descriptions':
-            'A slice of chocolate cake with a scoop of vanilla ice cream.',
-      },
-      {
-        'dessert_name': 'Cheesecake',
-        'price': 6.0,
-        'descriptions': 'A slice of cheesecake with a strawberry topping.',
-      },
-      {
-        'dessert_name': 'Tiramisu',
-        'price': 8.0,
-        'descriptions': 'A slice of tiramisu with a sprinkle of cocoa powder.',
-      },
-      {
-        'dessert_name': 'Creme Brulee',
-        'price': 7.0,
-        'descriptions': 'A serving of creme brulee with a caramelized top.',
-      },
-      {
-        'dessert_name': 'Panna Cotta',
-        'price': 6.0,
-        'descriptions': 'A serving of panna cotta with a berry compote.',
-      },
-      {
-        'dessert_name': 'Apple Pie',
-        'price': 7.0,
-        'descriptions': 'A slice of apple pie with a scoop of vanilla ice cream.',
-      },
-      {
-        'dessert_name': 'Brownie',
-        'price': 5.0,
-        'descriptions': 'A serving of brownie with a scoop of vanilla ice cream.',
-      },
-    ];
-
-    try {
-      final firestore = FirebaseFirestore.instance;
-
-      for (var coffee in coffeeList) {
-        await firestore.collection('desserts').add(coffee);
-      }
-
-      print('Coffee data added to Firestore');
-    } catch (e) {
-      print('Failed to add coffee data: $e');
-    }
-  }*/
-
   /// Get coffee data from firestore
   Future<List<Map<String, dynamic>>> getHotCoffeeData() async {
     try {
@@ -165,6 +111,7 @@ class AuthService extends ChangeNotifier {
       return [];
     }
   }
+
   Future<List<Map<String, dynamic>>> getColdCoffeeData() async {
     try {
       final QuerySnapshot querySnapshot =
@@ -178,6 +125,7 @@ class AuthService extends ChangeNotifier {
       return [];
     }
   }
+
   Future<List<Map<String, dynamic>>> getDessertData() async {
     try {
       final QuerySnapshot querySnapshot =

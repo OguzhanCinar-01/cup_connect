@@ -30,6 +30,7 @@ class Order {
 
 class OrderViewModel extends ChangeNotifier {
   List<Order> orders = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// Add order to the list
   void addOrder(Order order) {
@@ -78,6 +79,7 @@ class OrderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Submit order
   Future<void> submitOrder() async {
     final firestore = FirebaseFirestore.instance;
 
@@ -116,35 +118,64 @@ class OrderViewModel extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      print('Error submitting order: $e');
+      rethrow;
     }
   }
 
-  /// Get fetch orders
-  /*Future<void> fetchOrders() async {
-    final firestore = FirebaseFirestore.instance;
-
+  /// Update order status
+  Future<void> updateOrderStatus(String orderID, String newStatus) async {
     try {
-      QuerySnapshot snapshot = await firestore.collection('orders').get();
+      await _firestore.collection('orders').doc(orderID).update({
+        'orderStatus': newStatus,
+      });
+      print('Order status updated to $newStatus');
+    } catch (e) {
+      rethrow;
+    }
 
-      orders = snapshot.docs.map((doc) {
-        var data = doc.data() as Map<String, dynamic>;
-        return Order(
-          productName: data['productName'] ?? 'No product name found',
-          syrup: data['syrup'] ?? 'No syrup found',
-          size: data['size'] ?? 'No size found',
-          price: data['price'] ?? 0.0,
-          orderID: data['orderID'] ?? 'No order ID found',
-          orderDate: data['orderDate'] ?? 'No order date found',
-          orderTime: data['orderTime'] ?? 'No order time found',
-          orderStatus: data['orderStatus'] ?? 'No order status found',
-          quantity: data['quantity'] ?? 0,
-        );
-      }).toList();
+    // Update the status of the order
+    notifyListeners();
+  }
 
+  /// Get order by ID
+  Future<Map<String, dynamic>?> getOrderById(String orderID) async {
+    try {
+      DocumentSnapshot snapshot =
+          await _firestore.collection('orders').doc(orderID).get();
+
+      if (snapshot.exists) {
+        return snapshot.data() as Map<String, dynamic>?;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Adding orders to completedOrders collection
+  Future<void> completedOrders(
+      String orderID, Map<String, dynamic> orderData) async {
+    try {
+      /// Deleting the order from the orders collection
+      await _firestore.collection('orders').doc(orderID).delete();
+
+      /// Adding the order to the completedOrders collection
+      await _firestore
+          .collection('completedOrders')
+          .doc(orderID)
+          .set(orderData);
       notifyListeners();
     } catch (e) {
-      print('Error fetching orders: $e');
+      rethrow;
     }
-  }*/
+  }
+
+  /// Get completedOrders
+  Stream<List<Map<String, dynamic>>> getCompletedOrders() {
+    return _firestore
+        .collection('completedOrders')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
 }

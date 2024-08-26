@@ -1,5 +1,6 @@
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/card_view_model.dart';
+import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
@@ -12,6 +13,7 @@ class OrderDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderItems = order['order_items'] as List<dynamic>;
+    final orderViewModel = Provider.of<OrderViewModel>(context);
 
     double total = orderItems.fold(
       0.0,
@@ -111,8 +113,53 @@ class OrderDetails extends StatelessWidget {
 
                 /// Complete order button
                 GestureDetector(
-                  onTap: () {
-                    /// Complete order
+                  onTap: () async {
+                    try {
+                      /// Update order status to 'Completed'
+                      await orderViewModel.updateOrderStatus(
+                          order['orderID'], 'Completed');
+                      print(order['orderStatus']);
+
+                      /// Add the order to the completedOrders collection
+                      await orderViewModel.completedOrders(
+                          order['orderID'], order);
+                      showDialog(
+                        // ignore: use_build_context_synchronously
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Info'),
+                          content: const Text(
+                              'Order has been completed successfully'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    } catch (e) {
+                      showDialog(
+                        // ignore: use_build_context_synchronously
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Error'),
+                          content: const Text(
+                              'An error occurred while completing the order'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
