@@ -37,7 +37,7 @@ class GoBackButton extends StatelessWidget {
               /// Reset the selected syrup    
               // ignore: use_build_context_synchronously
               Provider.of<SyrupModel>(context, listen: false)
-                  .selectSyrup('None');
+                  .selectSyrup('Classic');
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,

@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 class Order {
   Order({
     required this.productName,
-    this.syrup = 'None',
+    this.syrup = 'Classic',
     this.size,
     required this.price,
     this.orderID,
@@ -129,12 +129,13 @@ class OrderViewModel extends ChangeNotifier {
         'orderStatus': newStatus,
       });
       print('Order status updated to $newStatus');
+      notifyListeners();
     } catch (e) {
       rethrow;
     }
 
     // Update the status of the order
-    notifyListeners();
+    
   }
 
   /// Get order by ID

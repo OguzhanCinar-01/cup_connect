@@ -23,6 +23,10 @@ class AuthService extends ChangeNotifier {
       throw Exception(e.code);
     }
   }
+  /// New signInAnonymously method
+  Future<UserCredential> signInAnonymously() async {
+    return await _firebaseAuth.signInAnonymously();
+  }
 
   /// create user account
   Future<UserCredential> signUpWithEmailAndPassword(

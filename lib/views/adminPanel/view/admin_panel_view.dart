@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/navigation/navigation_manager.dart';
+import 'package:coffee_shop/services/auth/auth_gate.dart';
+import 'package:coffee_shop/services/auth/auth_service.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/cupconnect_logo.dart';
 import 'package:coffee_shop/views/adminPanel/view/order_details.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
@@ -30,14 +33,49 @@ class _AdminPanelViewState extends State<AdminPanelView>
     super.dispose();
   }
 
+  void signOut() {
+    try {
+      ///Get auth service
+      final AuthService authService =
+          Provider.of<AuthService>(context, listen: false);
+
+      ///Logout
+      authService.signOut();
+
+      ///Navigate to AuthGate
+      NavigationManager.instance.navigateToPageClear(const AuthGate());
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final orderViewModel = Provider.of<OrderViewModel>(context);
     return Scaffold(
       backgroundColor: AppColors.surface,
+
+      ///AppBar
       appBar: AppBar(
-        title: const Text('Admin Panel'),
+        backgroundColor: AppColors.surface,
+        title: const SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 115),
+            child: CupConnectLogo(
+              fontSize: 30,
+              color: AppColors.onSecondary,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: signOut,
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
+
+      ///Body
       body: Column(
         children: [
           /// TabBar
@@ -106,12 +144,10 @@ class _AdminPanelViewState extends State<AdminPanelView>
                         'Preparing',
                       );
 
-                      // Optionally, delay to ensure Firestore update propagation
-                      await Future.delayed(const Duration(seconds: 1));
-
                       // Fetch updated order data
                       final updatedOrder = await orderViewModel
                           .getOrderById(customerOrder['orderID']);
+                      
 
                       // Navigate to OrderDetails
                       if (updatedOrder != null) {
@@ -192,7 +228,7 @@ class _AdminPanelViewState extends State<AdminPanelView>
             itemCount: completedOrders.length,
             itemBuilder: (context, index) {
               final orderData = completedOrders[index].data();
-              final orderItems = orderData['order_items'] as List<dynamic>;
+              final orderItems = orderData['order_items'];
 
               return Padding(
                 padding:

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class SyrupDropdown extends StatelessWidget {
   SyrupDropdown({super.key});
   final List<String> syrups = [
-    'None',
+    'Classic',
     'Vanilla',
     'Caramel',
     'Hazelnut',

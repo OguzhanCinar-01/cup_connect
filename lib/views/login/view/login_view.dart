@@ -1,3 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:coffee_shop/navigation/navigation_manager.dart';
+import 'package:coffee_shop/views/adminPanel/view/admin_panel_view.dart';
+import 'package:coffee_shop/views/home/view/home_view.dart';
+
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +27,6 @@ class _LoginViewState extends State<LoginView> {
 
   /// sign in user
   void signIn() async {
-    ///getting authservice instance
     final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
@@ -30,13 +35,67 @@ class _LoginViewState extends State<LoginView> {
         passwordController.text,
       );
     } catch (e) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
         ),
       );
     }
+  }
+
+  /// sign in as guest
+  void signInAsGuest() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      await authService.signInAnonymously();
+
+      // After sign in, navigate to home page
+      NavigationManager.instance.navigateToPageClear(const HomeView());
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
+  /// sign in as admin
+  /// sign in as admin
+  void signInAsAdmin() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    try {
+      // Admin validation before sign in
+      if (!_isAdmin(emailController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Admin invalid!'),
+          ),
+        );
+        return; // Return to prevent further execution if not admin
+      }
+
+      await authService.signInWithEmailAndPassword(
+        emailController.text,
+        passwordController.text,
+      );
+
+      // Navigate to Admin Panel after successful sign in
+      NavigationManager.instance.navigateToPageClear(const AdminPanelView());
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
+  bool _isAdmin(String email) {
+    const adminEmails = ['admin@gmail.com'];
+    return adminEmails.contains(email);
   }
 
   @override
@@ -90,6 +149,20 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   15.h,
 
+                  /// Admin Login Button
+                  MyButton(
+                    title: 'Admin Girişi',
+                    onTap: signInAsAdmin,
+                  ),
+                  15.h,
+
+                  /// Guest Login Button
+                  /*MyButton(
+                    title: 'Guest Girişi',
+                    onTap: signInAsGuest,
+                  ),*/
+                  15.h,
+
                   /// Register Line
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -115,9 +188,6 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ],
                   ),
-                  10.h,
-
-                  /// Admin Login Line
                 ],
               ),
             ),

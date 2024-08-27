@@ -17,7 +17,9 @@ class CoffeeGridItem extends StatelessWidget {
     required this.price,
     required this.description,
     this.coffeSize = '', /// Default size if not provided
-    this.syrup = 'None', /// Default syrup
+    this.syrup = 'Classic', /// Default syrup
+
+    
   });
 
   final String imagePath;
@@ -43,7 +45,6 @@ class CoffeeGridItem extends StatelessWidget {
             coffeeSize: coffeSize,
             syrup: syrup,
           );
-          print('Selected Product: ${selectedProduct.coffeeSize}, ${selectedProduct.syrup}'); 
 
           Provider.of<ProductViewModel>(context, listen: false)
               .selectProduct(selectedProduct);
@@ -80,7 +81,7 @@ class CoffeeGridItem extends StatelessWidget {
                 ),
               ),*/
 
-              /// Price
+              /// Price and FAB
               _priceText(fixedPrice, context),
             ],
           ),
@@ -139,10 +140,17 @@ class CoffeeGridItem extends StatelessWidget {
                 price: price,
                 size: coffeSize,
               );
+              print('Order: ${newOrder.syrup}');
 
               // Add the order to OrderViewModel
               Provider.of<OrderViewModel>(context, listen: false)
                   .addOrder(newOrder);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${newOrder.productName} added to cart.'),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
             },
             backgroundColor: AppColors.primary,
             elevation: 0,
