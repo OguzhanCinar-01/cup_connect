@@ -1,3 +1,5 @@
+import 'package:coffee_shop/services/firebase_service.dart';
+
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
 import '../../../utils/app_colors.dart';
@@ -35,6 +37,7 @@ class _RegisterViewState extends State<RegisterView> {
 
     /// get authservice
     final authService = Provider.of<AuthService>(context, listen: false);
+    final firebaseService = Provider.of<FirebaseService>(context, listen: false);
     try {
       final userCredential = await authService.signUpWithEmailAndPassword(
         emailController.text,
@@ -43,7 +46,7 @@ class _RegisterViewState extends State<RegisterView> {
 
       /// if the user is successfully created, create a new document in the users collection
       if (userCredential.user != null) {
-        await authService.addUserDetails(
+        await firebaseService.addUserDetails(
           nameController.text,
           surnameController.text,
           emailController.text,

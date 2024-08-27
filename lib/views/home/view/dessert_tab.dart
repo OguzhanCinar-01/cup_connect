@@ -6,7 +6,7 @@ class DessertTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Provider.of<AuthService>(context).getDessertData(),
+        future: Provider.of<FirebaseService>(context).getDessertData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: MyCircularProgressIndicator());

@@ -6,7 +6,7 @@ class ColdCoffeeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Provider.of<AuthService>(context).getColdCoffeeData(),
+        future: Provider.of<FirebaseService>(context).getColdCoffeeData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

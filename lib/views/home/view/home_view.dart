@@ -1,3 +1,4 @@
+import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
@@ -5,7 +6,6 @@ import 'package:coffee_shop/views/home/widget/my_circular_progress_indicator.dar
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../extensions/space_exs.dart';
-import '../../../services/auth/auth_service.dart';
 import '../../../utils/app_colors.dart';
 import '../widget/home_view_app_bar.dart';
 import '../widget/my_tab.dart';
@@ -28,6 +28,36 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  late Future<String?> _userNameFuture;
+  String _userName = '';
+  bool _isloading = true;
+
+  final FirebaseService _firebaseService = FirebaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    String? userId = FirebaseAuth.instance.currentUser!.uid;
+    _userNameFuture = _firebaseService.getUserName(userId);
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      String? userName = await _userNameFuture;
+      setState(() {
+        _userName = userName ?? 'User';
+        _userName = _userName[0].toUpperCase() + _userName.substring(1);
+        _isloading = false;
+      });
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        _isloading = false;
+      });
+    }
+  }
+
   List<Widget> myTabs = [
     const MyTab(
       iconPath: 'assets/images/hot_coffee.png',
@@ -45,8 +75,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    String? userId = FirebaseAuth.instance.currentUser!.uid;
-
     return DefaultTabController(
       length: myTabs.length,
       child: Scaffold(
@@ -61,25 +89,9 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             /// Good morning text
-            FutureBuilder(
-              future: Provider.of<AuthService>(context).getUserName(userId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: MyCircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return const Text('Error');
-                }
-
-                String name = (snapshot.data ?? 'User').toLowerCase();
-                name = name[0].toUpperCase() + name.substring(1);
-
-                /// Good morning text
-                return _goodMorningText(name);
-              },
-            ),
+            _isloading
+                ? const Center(child: MyCircularProgressIndicator())
+                : _goodMorningText(_userName),
 
             20.h,
 

@@ -2,6 +2,7 @@ import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/services/auth/auth_service.dart';
+import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/home_view_model.dart';
@@ -20,44 +21,54 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  Future<Map<String, String?>> _fetchUserDetails() async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+  /// Getting user data from Firebase
+  final FirebaseService _firebaseService = FirebaseService();
+  String _userName = 'User';
+  String _userSurname = '';
+  bool _isloading = true;
 
-    if (userId != null) {
-      final nameFuture = authService.getUserName(userId);
-      final surnameFuture = authService.getUserSurname(userId);
-
-      final results = await Future.wait([nameFuture, surnameFuture]);
-      return {
-        'name': results[0],
-        'surname': results[1],
-      };
-    }
-
-    return {'name': null, 'surname': null};
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
   }
 
-  /// Capitilize first letter of a string
-  String capitalizeFirstLetter(String text) {
-    if (text.isEmpty) return '';
-    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  Future<void> _loadUserData() async {
+    try {
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId != null) {
+        String? userName = await _firebaseService.getUserName(userId);
+        String? userSurname = await _firebaseService.getUserSurname(userId);
+
+        setState(() {
+          _userName = userName != null && userName.isNotEmpty
+              ? userName[0].toUpperCase() + userName.substring(1)
+              : 'User';
+
+          _userSurname = userSurname.isNotEmpty
+              ? userSurname[0].toUpperCase() + userSurname.substring(1)
+              : '';
+          _isloading = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+      setState(() {
+        _isloading = false;
+      });
+    }
   }
 
   void signOut() {
     try {
-      ///Get auth service
       final AuthService authService =
           Provider.of<AuthService>(context, listen: false);
-
-      ///Logout
       authService.signOut();
 
-      ///Get home view models
       final homeViewModel = Provider.of<HomeViewModel>(context, listen: false);
       homeViewModel.setIndex(0);
 
-      ///Navigate to AuthGate
       NavigationManager.instance.navigateToPageClear(const AuthGate());
     } catch (e) {
       throw Exception(e);
@@ -96,7 +107,6 @@ class _ProfileViewState extends State<ProfileView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                /// Circle Avatar
                 const CircleAvatar(
                   radius: 30,
                   backgroundColor: AppColors.onPrimary,
@@ -109,25 +119,13 @@ class _ProfileViewState extends State<ProfileView> {
                 20.w,
 
                 /// Profile User Text
-                FutureBuilder<Map<String, String?>>(
-                  future: _fetchUserDetails(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    }
-                    final name = snapshot.data?['name'] ?? 'User';
-                    final surname = snapshot.data?['surname'] ?? '';
-                    final fullName =
-                        '${capitalizeFirstLetter(name)} ${capitalizeFirstLetter(surname)}';
-                    return Text(
-                      fullName,
-                      style: AppStyle.profileText,
-                    );
-                  },
-                ),
+                if (_isloading)
+                  const CircularProgressIndicator()
+                else
+                  Text(
+                    '$_userName $_userSurname',
+                    style: AppStyle.profileText,
+                  ),
                 const Spacer(),
 
                 /// Logout Button
@@ -145,7 +143,6 @@ class _ProfileViewState extends State<ProfileView> {
           MyCard(title: 'Previous Orders', icon: Icons.history, onTap: () {}),
           MyCard(title: 'Settings', icon: Icons.settings, onTap: () {}),
           MyCard(title: 'About', icon: Icons.info, onTap: () {}),
-          
         ],
       ),
       bottomNavigationBar: const BottomNavBar(),

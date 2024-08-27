@@ -1,3 +1,4 @@
+import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/card_view_model.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
@@ -27,5 +28,6 @@ class ProviderManager {
     ChangeNotifierProvider(create: (context) => OrderViewModel()),
     ChangeNotifierProvider(create: (context) => AdminPanelViewModel()),
     ChangeNotifierProvider(create: (context) => CardModel()),
+    ChangeNotifierProvider(create: (context) => FirebaseService()),
   ];
 }
