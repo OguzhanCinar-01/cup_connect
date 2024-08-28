@@ -129,13 +129,11 @@ class OrderViewModel extends ChangeNotifier {
         'orderStatus': newStatus,
       });
       print('Order status updated to $newStatus');
-      notifyListeners();
     } catch (e) {
       rethrow;
     }
 
     // Update the status of the order
-    
   }
 
   /// Get order by ID
@@ -156,27 +154,33 @@ class OrderViewModel extends ChangeNotifier {
 
   /// Adding orders to completedOrders collection
   Future<void> completedOrders(
-      String orderID, Map<String, dynamic> orderData) async {
+      String orderId, Map<String, dynamic> order) async {
     try {
-      /// Deleting the order from the orders collection
-      await _firestore.collection('orders').doc(orderID).delete();
-
-      /// Adding the order to the completedOrders collection
-      await _firestore
-          .collection('completedOrders')
-          .doc(orderID)
-          .set(orderData);
-      notifyListeners();
+      await _firestore.collection('completedOrders').doc(orderId).set(order);
     } catch (e) {
+      print('Error adding to completedOrders: $e');
       rethrow;
     }
   }
 
   /// Get completedOrders
-  Stream<List<Map<String, dynamic>>> getCompletedOrders() {
-    return _firestore
-        .collection('completedOrders')
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  Future<List<Map<String, dynamic>>> getCompletedOrders() {
+    try {
+      return _firestore.collection('completedOrders').get().then(
+          (querySnapshot) =>
+              querySnapshot.docs.map((doc) => doc.data()).toList());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  /// Delete order
+  Future<void> deleteOrder(String orderID) async {
+    try {
+      await _firestore.collection('orders').doc(orderID).delete();
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

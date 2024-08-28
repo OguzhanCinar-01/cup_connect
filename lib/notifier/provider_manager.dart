@@ -1,6 +1,7 @@
 import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/card_view_model.dart';
+import 'package:coffee_shop/views/home/viewmodel/product_data_view_model.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/product_view_model.dart';
 import 'package:coffee_shop/views/product/viewmodel/size_button_model.dart';
@@ -26,8 +27,10 @@ class ProviderManager {
     ChangeNotifierProvider(create: (context) => SyrupModel()),
     ChangeNotifierProvider(create: (contex) => ProductViewModel()),
     ChangeNotifierProvider(create: (context) => OrderViewModel()),
-    ChangeNotifierProvider(create: (context) => AdminPanelViewModel()),
+    ChangeNotifierProvider(create: (context) => FirebaseService()),
     ChangeNotifierProvider(create: (context) => CardModel()),
     ChangeNotifierProvider(create: (context) => FirebaseService()),
+    ChangeNotifierProvider(create: (context) => ProductDataViewModel()),
+    ChangeNotifierProvider(create: (context) => AdminPanelViewModel()),
   ];
 }

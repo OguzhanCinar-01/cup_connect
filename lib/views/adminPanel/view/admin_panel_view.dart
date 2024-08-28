@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/services/auth/auth_service.dart';
@@ -6,7 +5,6 @@ import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/cupconnect_logo.dart';
 import 'package:coffee_shop/views/adminPanel/view/order_details.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
-import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +23,12 @@ class _AdminPanelViewState extends State<AdminPanelView>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+
+    final adminPanelViewModel =
+        Provider.of<AdminPanelViewModel>(context, listen: false);
+
+    adminPanelViewModel.fetchOrders();
+    adminPanelViewModel.fetchCompletedOrders();
   }
 
   @override
@@ -51,7 +55,6 @@ class _AdminPanelViewState extends State<AdminPanelView>
 
   @override
   Widget build(BuildContext context) {
-    final orderViewModel = Provider.of<OrderViewModel>(context);
     return Scaffold(
       backgroundColor: AppColors.surface,
 
@@ -100,8 +103,8 @@ class _AdminPanelViewState extends State<AdminPanelView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildOrdersTab(context, orderViewModel),
-                _buildCompletedOrdersTab(context),
+                _buildOrdersTab(),
+                _buildCompletedOrdersTab(),
               ],
             ),
           ),
@@ -110,26 +113,18 @@ class _AdminPanelViewState extends State<AdminPanelView>
     );
   }
 
-  Widget _buildOrdersTab(BuildContext context, OrderViewModel orderViewModel) {
-    return FutureBuilder(
-      future: Provider.of<AdminPanelViewModel>(context).getAdminPanelData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return const Center(
-            child: Text('An error occurred!'),
-          );
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+  Widget _buildOrdersTab() {
+    return Consumer<AdminPanelViewModel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (viewModel.orders.isEmpty) {
           return const Center(child: Text('No orders found.'));
         } else {
-          final customerOrders = snapshot.data as List<Map<String, dynamic>>;
           return ListView.builder(
-            itemCount: customerOrders.length,
+            itemCount: viewModel.orders.length,
             itemBuilder: (context, index) {
-              final customerOrder = customerOrders[index];
+              final customerOrder = viewModel.orders[index];
               final orderItems = customerOrder['order_items'] as List<dynamic>;
 
               return Padding(
@@ -138,18 +133,10 @@ class _AdminPanelViewState extends State<AdminPanelView>
                 child: GestureDetector(
                   onTap: () async {
                     try {
-                      // Order status update to Preparing
-                      await orderViewModel.updateOrderStatus(
-                        customerOrder['orderID'],
-                        'Preparing',
-                      );
-
-                      // Fetch updated order data
-                      final updatedOrder = await orderViewModel
+                      await viewModel.updateOrderStatus(
+                          customerOrder['orderID'], 'Preparing');
+                      final updatedOrder = await viewModel
                           .getOrderById(customerOrder['orderID']);
-                      
-
-                      // Navigate to OrderDetails
                       if (updatedOrder != null) {
                         NavigationManager.instance.navigateToPage(
                           OrderDetails(order: updatedOrder),
@@ -172,8 +159,6 @@ class _AdminPanelViewState extends State<AdminPanelView>
                           Text('Date: ${customerOrder['orderDate']}'),
                           Text('Time: ${customerOrder['orderTime']}'),
                           Text('Status: ${customerOrder['orderStatus']}'),
-
-                          /// Divider
                           const Divider(color: Colors.white),
                           ...orderItems.map((item) {
                             return Padding(
@@ -211,23 +196,18 @@ class _AdminPanelViewState extends State<AdminPanelView>
     );
   }
 
-  Widget _buildCompletedOrdersTab(BuildContext context) {
-    return FutureBuilder(
-      future: FirebaseFirestore.instance.collection('completedOrders').get(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+  Widget _buildCompletedOrdersTab() {
+    return Consumer<AdminPanelViewModel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.isLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('An error occurred!'));
-        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        } else if (viewModel.completedOrders.isEmpty) {
           return const Center(child: Text('No completed orders found.'));
         } else {
-          final completedOrders = snapshot.data!.docs;
-
           return ListView.builder(
-            itemCount: completedOrders.length,
+            itemCount: viewModel.completedOrders.length,
             itemBuilder: (context, index) {
-              final orderData = completedOrders[index].data();
+              final orderData = viewModel.completedOrders[index];
               final orderItems = orderData['order_items'];
 
               return Padding(
@@ -246,8 +226,6 @@ class _AdminPanelViewState extends State<AdminPanelView>
                         Text('Date: ${orderData['orderDate']}'),
                         Text('Time: ${orderData['orderTime']}'),
                         Text('Status: ${orderData['orderStatus']}'),
-
-                        /// Divider
                         const Divider(color: Colors.white),
                         ...orderItems.map((item) {
                           return Padding(
@@ -263,8 +241,6 @@ class _AdminPanelViewState extends State<AdminPanelView>
                                   ),
                                 ),
                                 Text('Syrup: ${item['syrup']}'),
-                                Text(
-                                    '${item['quantity']} x \$${item['price']}'),
                               ],
                             ),
                           );

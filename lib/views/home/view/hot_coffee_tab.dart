@@ -3,40 +3,32 @@ part of 'home_view.dart';
 class _HotCoffeeTab extends StatelessWidget {
   const _HotCoffeeTab();
 
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Provider.of<FirebaseService>(context).getHotCoffeeData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data found.'));
-          } else {
-            final hotcoffeeList = snapshot.data!;
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: hotcoffeeList.length,
-              itemBuilder: (context, index) {
-                final hotCoffee = hotcoffeeList[index];
-                return CoffeeGridItem(
-                  imagePath: 'assets/images/hot_cappucino.png',
-                  title: hotCoffee['coffee_name'] ?? 'Unknown',
-                  price: (hotCoffee['price'] as double),
-                  description: hotCoffee['descriptions'] ?? 'No Data',
-                  coffeSize: hotCoffee['coffee_size'],
-                  
-                );
-              },
-            );
-          }
-        });
+    final productDataViewModel = Provider.of<ProductDataViewModel>(context);
+    // If hot coffee list is empty, fetch the data
+    if (productDataViewModel.hotCoffeeList.isEmpty) {
+      productDataViewModel.getHotCoffeeData();
+    }
+    return productDataViewModel.hotCoffeeList.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: productDataViewModel.hotCoffeeList.length,
+            itemBuilder: (context, index) {
+              final hotCoffee = productDataViewModel.hotCoffeeList[index];
+              return CoffeeGridItem(
+                imagePath: 'assets/images/hot_${hotCoffee['imgPath']}.png',
+                title: hotCoffee['coffee_name'] ?? 'Unknown',
+                price: (hotCoffee['price'] as double),
+                description: hotCoffee['descriptions'] ?? 'No Data',
+                coffeSize: hotCoffee['coffee_size'],
+              );
+            },
+          );
   }
 }

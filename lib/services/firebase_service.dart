@@ -102,7 +102,7 @@ class FirebaseService extends ChangeNotifier {
       rethrow;
     }
   }
-  
+
   /// Get orderID from firestore
   Future<String> getOrderId() async {
     try {
@@ -111,6 +111,60 @@ class FirebaseService extends ChangeNotifier {
     } catch (e) {
       print("Error fetching order ID: $e");
       return '';
+    }
+  }
+
+  /// Get admin panel data from firestore
+  Future<List<Map<String, dynamic>>> getAdminPanelData() async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance.collection('orders').get();
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print('Error fetching admin panel data: $e');
+      return [];
+    }
+  }
+
+  /// Get completed orders
+  Future<List<Map<String, dynamic>>> getCompletedOrdersData() async {
+    try {
+      final QuerySnapshot querySnapshot =
+          await _firestore.collection('completedOrders').get();
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      print('Failed to fetch completed orders: $e');
+      return [];
+    }
+  }
+
+  /// Update order status
+  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+    try {
+      await _firestore.collection('orders').doc(orderId).update({
+        'orderStatus': newStatus,
+      });
+    } catch (e) {
+      print('Error updating order status: $e');
+      rethrow;
+    }
+  }
+
+  /// Get Order ID from firestore
+  Future<Map<String, dynamic>?> getOrderById(String orderId) async {
+    try {
+      DocumentSnapshot doc =
+          await _firestore.collection('orders').doc(orderId).get();
+      if (doc.exists) {
+        return doc.data() as Map<String, dynamic>;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("Error getting order by ID: $e");
+      rethrow;
     }
   }
 }
