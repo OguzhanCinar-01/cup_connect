@@ -7,7 +7,6 @@ class AdminPanelViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> _orders = [];
   final List<Map<String, dynamic>> _completedOrders = [];
   bool _isLoading = false;
-  
 
   List<Map<String, dynamic>> get orders => _orders;
   List<Map<String, dynamic>> get completedOrders => _completedOrders;
@@ -26,14 +25,21 @@ class AdminPanelViewModel extends ChangeNotifier {
   Future<void> fetchCompletedOrders() async {
     _isLoading = true;
     notifyListeners();
+
+    _completedOrders.clear();
     _completedOrders.addAll(await FirebaseService().getCompletedOrdersData());
     _isLoading = false;
     notifyListeners();
   }
+
   /// Update order status
-  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+  Future<void> setUpdateOrderStatus(String orderId, String newStatus) async {
     try {
       await _firebaseService.updateOrderStatus(orderId, newStatus);
+
+      await fetchOrders();
+      await fetchCompletedOrders();
+
       notifyListeners();
     } catch (e) {
       print('Error updating order status: $e');

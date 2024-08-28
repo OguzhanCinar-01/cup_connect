@@ -118,20 +118,18 @@ class OrderDetails extends StatelessWidget {
                       /// Update order status to 'Completed'
                       await orderViewModel.updateOrderStatus(
                           order['orderID'], 'Completed');
-                      print(order['orderStatus']);
 
-                      Future.delayed(
-                          const Duration(seconds: 2)
-                          // ignore: missing_return
-                          , () {
-                        print(order['orderStatus']);
-                      });
+                      // Optionally, you can fetch updated order to check if status is changed
+                      final updatedOrder =
+                          await orderViewModel.getOrderById(order['orderID']);
+                      if (updatedOrder != null) {
+                        // Add the order to the completedOrders collection
+                        await orderViewModel.completedOrders(
+                            order['orderID'], updatedOrder);
 
-                      /// Add the order to the completedOrders collection
-
-                      await orderViewModel.completedOrders(
-                          order['orderID'], order);
-
+                        // Delete the order from the orders collection
+                        await orderViewModel.deleteOrder(order['orderID']);
+                      }
                       showDialog(
                         // ignore: use_build_context_synchronously
                         context: context,

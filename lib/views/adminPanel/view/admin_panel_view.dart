@@ -133,7 +133,7 @@ class _AdminPanelViewState extends State<AdminPanelView>
                 child: GestureDetector(
                   onTap: () async {
                     try {
-                      await viewModel.updateOrderStatus(
+                      await viewModel.setUpdateOrderStatus(
                           customerOrder['orderID'], 'Preparing');
                       final updatedOrder = await viewModel
                           .getOrderById(customerOrder['orderID']);
