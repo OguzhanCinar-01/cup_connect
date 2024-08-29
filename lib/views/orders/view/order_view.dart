@@ -34,19 +34,24 @@ class _OrderViewState extends State<OrderView> {
 
     void completeOrder() async {
       // Complete the order
-
       final updatedOrder =
           await orderViewModel.getOrderById(orders.first['orderID']);
       if (updatedOrder != null) {
         // Add the order to the completedOrders collection
         await orderViewModel.completedOrders(
             orders.first['orderID'], updatedOrder);
+
         /// Delete the order from the orders collection
         await orderViewModel.deleteOrder(orders.first['orderID']);
+
+        /// Fetch the updated orders
+        adminPanelViewModel.fetchOrders();
+
+        /// Notify the user that the order has been completed
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Order completed successfully'),
+            content: Text('Enjoy your coffee!'),
           ),
         );
       }

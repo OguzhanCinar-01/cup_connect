@@ -108,7 +108,6 @@ class FirebaseService extends ChangeNotifier {
     try {
       final DocumentReference docRef = _firestore.collection('orders').doc();
       return docRef.id;
-      
     } catch (e) {
       print("Error fetching order ID: $e");
       return '';
@@ -120,9 +119,8 @@ class FirebaseService extends ChangeNotifier {
     try {
       final snapshot =
           await FirebaseFirestore.instance.collection('orders').get();
-          print('Admin panel data fetched successfully');
+      print('Admin panel data fetched successfully');
       return snapshot.docs.map((doc) => doc.data()).toList();
-      
     } catch (e) {
       print('Error fetching admin panel data: $e');
       return [];
@@ -134,7 +132,7 @@ class FirebaseService extends ChangeNotifier {
     try {
       final QuerySnapshot querySnapshot =
           await _firestore.collection('completedOrders').get();
-          print('Completed orders fetched successfully');
+      print('Completed orders fetched successfully');
       return querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
@@ -171,5 +169,5 @@ class FirebaseService extends ChangeNotifier {
       rethrow;
     }
   }
-  
+
 }

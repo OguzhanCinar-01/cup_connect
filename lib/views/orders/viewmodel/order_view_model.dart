@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -95,6 +96,15 @@ class OrderViewModel extends ChangeNotifier {
     String orderID = uuid.v4();
     orderID = orderID.substring(0, 8);
 
+    // Kullanıcının email'ini al
+    final String? email =
+        await getCurrentUserEmail(); // Burada email'i alacak bir yöntem kullanıyoruz
+
+    if (email == null) return;
+
+    // Kullanıcı kimliğini al
+    String? userId = await getUserId(email);
+
     try {
       // Adding order to the database with the orderID in this way
       // allows us to easily query the order later
@@ -104,6 +114,7 @@ class OrderViewModel extends ChangeNotifier {
           'orderDate': formattedDate,
           'orderTime': formattedTime,
           'orderStatus': 'Pending',
+          'userId': userId,
           'order_items': orders
               .map((order) => {
                     'productName': order.productName,
@@ -122,6 +133,12 @@ class OrderViewModel extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<String?> getCurrentUserEmail() async {
+    // Firebase Authentication'dan mevcut kullanıcının email'ini almak için
+    final user = FirebaseAuth.instance.currentUser;
+    return user?.email;
   }
 
   /// Update order status
@@ -216,8 +233,6 @@ class OrderViewModel extends ChangeNotifier {
     }
   }
 
-
-
   /// Get userId from firestore
   Future<String?> getUserId(String email) async {
     try {
@@ -225,6 +240,7 @@ class OrderViewModel extends ChangeNotifier {
           .collection('users')
           .where('email', isEqualTo: email)
           .get();
+      print('User ID: ${querySnapshot.docs.first.id}');
       if (querySnapshot.docs.isNotEmpty) {
         return querySnapshot.docs.first.id;
       } else {

@@ -89,6 +89,14 @@ class CartAddedItems extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
+                        /// UserId
+                        Text(
+                          'User ID: ${order.userId}',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
                       ],
                     ),
 
