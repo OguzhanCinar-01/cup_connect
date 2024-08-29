@@ -1,4 +1,5 @@
 import 'package:coffee_shop/utils/app_styles.dart';
+import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/card_view_model.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class OrderDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final orderItems = order['order_items'] as List<dynamic>;
     final orderViewModel = Provider.of<OrderViewModel>(context);
+    final adminPanelViewModel = Provider.of<AdminPanelViewModel>(context);
 
     double total = orderItems.fold(
       0.0,
@@ -39,68 +41,70 @@ class OrderDetails extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: MediaQuery.of(context).size.height * 0.645,
-            child: ListView(
-              children: [
-                ...orderItems.asMap().entries.map((entry) {
-                  var item = entry.value;
-
-                  return ChangeNotifierProvider(
-                    create: (_) => CardModel(),
-                    child: Consumer<CardModel>(
-                      builder: (context, model, child) {
-                        return GestureDetector(
-                          onTap: () {
-                            model.toggleSelection();
-                          },
-                          child: Card(
-                            color: model.isSelected
-                                ? AppColors.orderStatusGreen
-                                : AppColors.orderStatusRed,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${item['productName']}: ',
-                                        style: AppStyle.orderDetailsProduct,
-                                      ),
-                                      Text('${item['size']}',
-                                          style: AppStyle.orderDetailsText),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('Syrup: ',
-                                          style: AppStyle.orderDetailsProduct),
-                                      Text(' ${item['syrup']}',
-                                          style: AppStyle.orderDetailsText),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Quantity: ',
-                                        style: AppStyle.orderDetailsProduct,
-                                      ),
-                                      Text(
-                                          '${item['quantity']} x \$${item['price']}',
-                                          style: AppStyle.orderDetailsText),
-                                    ],
-                                  ),
-                                ],
+            child: Consumer<OrderViewModel>(builder: (context, model, child) {
+              return ListView(
+                children: [
+                  ...orderItems.asMap().entries.map((entry) {
+                    var item = entry.value;
+                    return ChangeNotifierProvider(
+                      create: (_) => CardModel(),
+                      child: Consumer<CardModel>(
+                        builder: (context, model, child) {
+                          return GestureDetector(
+                            onTap: () {
+                              model.toggleSelection();
+                            },
+                            child: Card(
+                              color: model.isSelected
+                                  ? AppColors.orderStatusGreen
+                                  : AppColors.orderStatusRed,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${item['productName']}: ',
+                                          style: AppStyle.orderDetailsProduct,
+                                        ),
+                                        Text('${item['size']}',
+                                            style: AppStyle.orderDetailsText),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('Syrup: ',
+                                            style:
+                                                AppStyle.orderDetailsProduct),
+                                        Text(' ${item['syrup']}',
+                                            style: AppStyle.orderDetailsText),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Quantity: ',
+                                          style: AppStyle.orderDetailsProduct,
+                                        ),
+                                        Text(
+                                            '${item['quantity']} x \$${item['price']}',
+                                            style: AppStyle.orderDetailsText),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }),
-              ],
-            ),
+                          );
+                        },
+                      ),
+                    );
+                  }),
+                ],
+              );
+            }),
           ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -148,6 +152,8 @@ class OrderDetails extends StatelessWidget {
                           ],
                         ),
                       );
+                      adminPanelViewModel.fetchOrders();
+                      adminPanelViewModel.fetchCompletedOrders();
                     } catch (e) {
                       showDialog(
                         // ignore: use_build_context_synchronously

@@ -129,6 +129,7 @@ class OrderViewModel extends ChangeNotifier {
         'orderStatus': newStatus,
       });
       print('Order status updated to $newStatus');
+      notifyListeners();
     } catch (e) {
       rethrow;
     }
@@ -183,5 +184,4 @@ class OrderViewModel extends ChangeNotifier {
       rethrow;
     }
   }
-
 }

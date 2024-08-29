@@ -38,6 +38,7 @@ class AdminPanelViewModel extends ChangeNotifier {
       await _firebaseService.updateOrderStatus(orderId, newStatus);
 
       await fetchOrders();
+
       await fetchCompletedOrders();
 
       notifyListeners();
@@ -51,6 +52,7 @@ class AdminPanelViewModel extends ChangeNotifier {
   Future<Map<String, dynamic>?> getOrderById(String orderId) async {
     try {
       final orderData = await _firebaseService.getOrderById(orderId);
+      notifyListeners();
       return orderData;
     } catch (e) {
       print("Error getting order by ID: $e");
