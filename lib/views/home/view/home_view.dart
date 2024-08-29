@@ -2,8 +2,6 @@ import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/product_data_view_model.dart';
-import 'package:coffee_shop/views/home/viewmodel/product_data_view_model.dart';
-import 'package:coffee_shop/views/home/viewmodel/product_data_view_model.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/my_circular_progress_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';

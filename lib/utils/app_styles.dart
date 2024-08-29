@@ -30,9 +30,15 @@ class AppStyle {
   );
   static final TextStyle priceTextStyle = GoogleFonts.poppins(
     fontSize: 17,
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w400,
     color: Colors.black,
   );
+  static final TextStyle priceTextStyleBold = GoogleFonts.poppins(
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+  );
+
   static final TextStyle profileText = GoogleFonts.poppins(
     fontSize: 22,
     fontWeight: FontWeight.w300,

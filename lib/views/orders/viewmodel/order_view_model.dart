@@ -14,9 +14,11 @@ class Order {
     this.orderTime,
     this.orderStatus,
     this.quantity = 1,
+    this.userId,
   });
 
   final String productName;
+  final String? userId;
   String syrup;
   final String? size;
   final double price;
@@ -157,7 +159,7 @@ class OrderViewModel extends ChangeNotifier {
   Future<void> completedOrders(
       String orderId, Map<String, dynamic> order) async {
     try {
-      await _firestore.collection('completedOrders').doc(orderId).set(order);
+      await _firestore.collection('completed_orders').doc(orderId).set(order);
     } catch (e) {
       print('Error adding to completedOrders: $e');
       rethrow;
@@ -182,6 +184,55 @@ class OrderViewModel extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       rethrow;
+    }
+  }
+
+  // Fetch orders for a specific user
+  Future<void> fetchOrdersByUserId(String userId) async {
+    try {
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      orders = querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return Order(
+          productName: data['productName'],
+          syrup: data['syrup'],
+          size: data['size'],
+          price: data['price'],
+          orderID: data['orderID'],
+          orderDate: DateFormat('dd/MM/yyyy').parse(data['orderDate']),
+          orderTime: DateFormat('HH:mm').parse(data['orderTime']),
+          orderStatus: data['orderStatus'],
+          quantity: data['quantity'],
+          userId: userId,
+        );
+      }).toList();
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching orders: $e');
+    }
+  }
+
+
+
+  /// Get userId from firestore
+  Future<String?> getUserId(String email) async {
+    try {
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.id;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching user ID: $e');
+      return null;
     }
   }
 }

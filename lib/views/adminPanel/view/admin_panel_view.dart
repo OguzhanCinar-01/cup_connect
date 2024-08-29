@@ -121,10 +121,15 @@ class _AdminPanelViewState extends State<AdminPanelView>
         } else if (viewModel.orders.isEmpty) {
           return const Center(child: Text('No orders found.'));
         } else {
+          /// Display orders
+          final pendingOrders = viewModel.orders
+              .where((order) => order['orderStatus'] != 'Completed')
+              .toList();
+
           return ListView.builder(
-            itemCount: viewModel.orders.length,
+            itemCount: pendingOrders.length,
             itemBuilder: (context, index) {
-              final customerOrder = viewModel.orders[index];
+              final customerOrder = pendingOrders[index];
               final orderItems = customerOrder['order_items'] as List<dynamic>;
 
               return Padding(
@@ -204,11 +209,18 @@ class _AdminPanelViewState extends State<AdminPanelView>
         } else if (viewModel.completedOrders.isEmpty) {
           return const Center(child: Text('No completed orders found.'));
         } else {
+          // Completed orders'ı göstermek için her iki listeyi birleştirin
+          final completedOrders = [
+            ...viewModel.orders
+                .where((order) => order['orderStatus'] == 'Completed'),
+            ...viewModel.completedOrders,
+          ];
+
           return ListView.builder(
-            itemCount: viewModel.completedOrders.length,
+            itemCount: completedOrders.length,
             itemBuilder: (context, index) {
-              final orderData = viewModel.completedOrders[index];
-              final orderItems = orderData['order_items'];
+              final orderData = completedOrders[index];
+              final orderItems = orderData['order_items'] as List<dynamic>;
 
               return Padding(
                 padding:

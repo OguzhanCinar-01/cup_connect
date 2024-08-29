@@ -126,14 +126,8 @@ class OrderDetails extends StatelessWidget {
                       // Optionally, you can fetch updated order to check if status is changed
                       final updatedOrder =
                           await orderViewModel.getOrderById(order['orderID']);
-                      if (updatedOrder != null) {
-                        // Add the order to the completedOrders collection
-                        await orderViewModel.completedOrders(
-                            order['orderID'], updatedOrder);
+                          print('Updated order: $updatedOrder');
 
-                        // Delete the order from the orders collection
-                        await orderViewModel.deleteOrder(order['orderID']);
-                      }
                       showDialog(
                         // ignore: use_build_context_synchronously
                         context: context,

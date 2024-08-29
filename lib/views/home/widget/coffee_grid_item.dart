@@ -16,10 +16,12 @@ class CoffeeGridItem extends StatelessWidget {
     required this.title,
     required this.price,
     required this.description,
-    this.coffeSize = '', /// Default size if not provided
-    this.syrup = 'Classic', /// Default syrup
+    this.coffeSize = '',
 
-    
+    /// Default size if not provided
+    this.syrup = 'Classic',
+
+    /// Default syrup
   });
 
   final String imagePath;
@@ -68,18 +70,6 @@ class CoffeeGridItem extends StatelessWidget {
 
               /// Title
               _productTitleText(),
-
-              /// Description
-              /* Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  description,
-                  style: GoogleFonts.lato(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ),*/
 
               /// Price and FAB
               _priceText(fixedPrice, context),

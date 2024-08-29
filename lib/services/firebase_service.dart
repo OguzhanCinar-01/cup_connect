@@ -171,4 +171,5 @@ class FirebaseService extends ChangeNotifier {
       rethrow;
     }
   }
+  
 }

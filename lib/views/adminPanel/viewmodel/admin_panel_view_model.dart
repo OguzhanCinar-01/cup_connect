@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +6,7 @@ class AdminPanelViewModel extends ChangeNotifier {
   final FirebaseService _firebaseService = FirebaseService();
 
   List<Map<String, dynamic>> _orders = [];
-  final List<Map<String, dynamic>> _completedOrders = [];
+  List<Map<String, dynamic>> _completedOrders = [];
   bool _isLoading = false;
 
   List<Map<String, dynamic>> get orders => _orders;
@@ -26,8 +27,17 @@ class AdminPanelViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _completedOrders.clear();
-    _completedOrders.addAll(await FirebaseService().getCompletedOrdersData());
+    try {
+      // Firestore'dan completed_orders koleksiyonunu çekin
+      final completedOrdersSnapshot =
+          await FirebaseFirestore.instance.collection('completed_orders').get();
+
+      _completedOrders =
+          completedOrdersSnapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print('Error fetching completed orders: $e');
+    }
+
     _isLoading = false;
     notifyListeners();
   }
@@ -45,6 +55,20 @@ class AdminPanelViewModel extends ChangeNotifier {
     } catch (e) {
       print('Error updating order status: $e');
       rethrow;
+    }
+  }
+
+  /// Get timeline status based on order status
+  String getTimelineStatus(String status) {
+    switch (status) {
+      case 'Pending':
+        return 'Order has been received.';
+      case 'Preparing':
+        return 'Order is preparing.';
+      case 'Completed':
+        return 'Your order is completed! Meet us at the pickup area.';
+      default:
+        return 'Unknown status';
     }
   }
 
