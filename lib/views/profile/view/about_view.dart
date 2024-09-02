@@ -3,7 +3,7 @@ import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/utils/cupconnect_logo.dart';
-import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
+import '../../home/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class AboutView extends StatelessWidget {

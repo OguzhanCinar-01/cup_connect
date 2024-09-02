@@ -93,4 +93,26 @@ class AdminPanelViewModel extends ChangeNotifier {
       rethrow;
     }
   }
+  /// Get completed order by UserID
+  Future<void> fetchCompletedOrdersbyUserID(String userId) async {
+  _isLoading = true;
+  notifyListeners();
+
+  try {
+    final completedOrdersSnapshot = await FirebaseFirestore.instance
+        .collection('completed_orders')
+        .where('userId', isEqualTo: userId)
+        .get();
+        
+
+    _completedOrders = completedOrdersSnapshot.docs
+        .map((doc) => doc.data())
+        .toList();
+  } catch (e) {
+    print('Error fetching completed orders: $e');
+  }
+
+  _isLoading = false;
+  notifyListeners();
+}
 }
