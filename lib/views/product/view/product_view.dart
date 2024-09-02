@@ -53,13 +53,16 @@ class _ProductViewState extends State<ProductView> {
 
             ///Syrup dropdown
             if (product.coffeeSize.isNotEmpty) _syrupDropdown(),
-            10.h,
 
             ///Size Selector
             if (product.coffeeSize.isNotEmpty) _sizeSelector(),
-            8.h,
-
-            ///About the product and syrup dropdown
+            const Divider(
+              color: AppColors.primary,
+              thickness: 0.3,
+              indent: 40,
+              endIndent: 40,
+            ),
+            ///About the product
             _aboutProduct(),
             5.h,
 
@@ -77,7 +80,7 @@ class _ProductViewState extends State<ProductView> {
 
   Widget _syrupDropdown() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 40, right: 20),
+      padding: const EdgeInsets.only(bottom: 20, left: 40, right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
