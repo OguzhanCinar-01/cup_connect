@@ -24,7 +24,7 @@ class _ProductViewState extends State<ProductView> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<ProductViewModel>(context).selectedProduct;
-    final userID = Provider.of<OrderViewModel>(context).getUserId;
+
 
     if (product == null) {
       return Scaffold(
@@ -63,7 +63,7 @@ class _ProductViewState extends State<ProductView> {
             const Spacer(),
 
             ///Add to cart button
-            _addToCartButton(product, userID as String),
+            _addToCartButton(product),
           ],
         ),
       ),
@@ -171,7 +171,7 @@ class _ProductViewState extends State<ProductView> {
     );
   }
 
-  Widget _addToCartButton(Product product, String userID) {
+  Widget _addToCartButton(Product product) {
     return Padding(
       padding: const EdgeInsets.only(left: 80, right: 80),
       child: GestureDetector(
@@ -182,7 +182,6 @@ class _ProductViewState extends State<ProductView> {
             price: product.price,
             size: product.coffeeSize,
             syrup: product.syrup,
-            userId: userID,
           );
           showDialog(
             // ignore: use_build_context_synchronously

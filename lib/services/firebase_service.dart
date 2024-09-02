@@ -169,5 +169,20 @@ class FirebaseService extends ChangeNotifier {
       rethrow;
     }
   }
+  /// Get order by User ID 
+  Future<List<Map<String, dynamic>>> getOrderByUserId(String userId) async {
+    try {
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection('orders')
+          .where('userId', isEqualTo: userId)
+          .get();
+      return querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+    } catch (e) {
+      print('Error fetching order by user ID: $e');
+      return [];
+    }
+  }
 
 }

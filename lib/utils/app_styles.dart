@@ -59,4 +59,14 @@ class AppStyle {
     fontWeight: FontWeight.bold,
     color: Colors.black,
   );
+  static final TextStyle aboutTitle = GoogleFonts.poppins(
+    fontSize: 20,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
+  static final TextStyle aboutText = GoogleFonts.poppins(
+    fontSize: 17,
+    fontWeight: FontWeight.w300,
+    color: Colors.black,
+  );
 }

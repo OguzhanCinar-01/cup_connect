@@ -62,7 +62,6 @@ class _LoginViewState extends State<LoginView> {
   }
 
   /// sign in as admin
-  /// sign in as admin
   void signInAsAdmin() async {
     final authService = Provider.of<AuthService>(context, listen: false);
 

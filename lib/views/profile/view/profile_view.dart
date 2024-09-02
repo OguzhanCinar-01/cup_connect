@@ -8,6 +8,7 @@ import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/home_view_model.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/home_view_app_bar.dart';
+import 'package:coffee_shop/views/profile/view/about_view.dart';
 import 'package:coffee_shop/views/profile/widget/my_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,13 @@ class _ProfileViewState extends State<ProfileView> {
           10.h,
           MyCard(title: 'Previous Orders', icon: Icons.history, onTap: () {}),
           MyCard(title: 'Settings', icon: Icons.settings, onTap: () {}),
-          MyCard(title: 'About', icon: Icons.info, onTap: () {}),
+          MyCard(
+              title: 'About',
+              icon: Icons.info,
+              onTap: () {
+                NavigationManager.instance.navigateToPage(const AboutView());
+                print('About clicked');
+              }),
         ],
       ),
       bottomNavigationBar: const BottomNavBar(),

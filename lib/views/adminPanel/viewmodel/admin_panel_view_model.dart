@@ -6,7 +6,7 @@ class AdminPanelViewModel extends ChangeNotifier {
   final FirebaseService _firebaseService = FirebaseService();
 
   List<Map<String, dynamic>> _orders = [];
-  List<Map<String, dynamic>> _completedOrders = [];
+   List<Map<String, dynamic>> _completedOrders = [];
   bool _isLoading = false;
 
   List<Map<String, dynamic>> get orders => _orders;
@@ -21,6 +21,14 @@ class AdminPanelViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+  /// Fetch orders by ID
+  Future<void> fetchOrdersById(String orderId) async {
+    _isLoading = true;
+    notifyListeners();
+    _orders = await FirebaseService().getOrderByUserId(orderId);
+    _isLoading = false;
+    notifyListeners();
+  }
 
   /// Fetch completed orders
   Future<void> fetchCompletedOrders() async {
@@ -29,11 +37,13 @@ class AdminPanelViewModel extends ChangeNotifier {
 
     try {
       // Firestore'dan completed_orders koleksiyonunu çekin
-      final completedOrdersSnapshot =
-          await FirebaseFirestore.instance.collection('completed_orders').get();
+      final completedOrdersSnapshot = await FirebaseFirestore.instance
+          .collection('completed_orders')
+          .get();
 
-      _completedOrders =
-          completedOrdersSnapshot.docs.map((doc) => doc.data()).toList();
+      _completedOrders = completedOrdersSnapshot.docs
+          .map((doc) => doc.data())
+          .toList();
     } catch (e) {
       print('Error fetching completed orders: $e');
     }

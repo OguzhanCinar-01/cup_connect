@@ -11,7 +11,7 @@ class MyCard extends StatelessWidget {
 
   final String title;
   final IconData icon;
-  final Function onTap;
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,8 +25,8 @@ class MyCard extends StatelessWidget {
                 title,
               ),
               leading: Icon(icon),
-              onTap: () {
-              },
+              onTap: onTap,
+              
             ),
           ],
         ),

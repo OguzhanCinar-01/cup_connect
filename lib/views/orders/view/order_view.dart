@@ -8,6 +8,7 @@ import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
 import 'package:coffee_shop/views/orders/widget/my_timeline_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OrderView extends StatefulWidget {
   const OrderView({super.key});
@@ -23,7 +24,15 @@ class _OrderViewState extends State<OrderView> {
     // Fetch orders when the widget is initialized
     final adminPanelViewModel =
         Provider.of<AdminPanelViewModel>(context, listen: false);
-    adminPanelViewModel.fetchOrders();
+    
+    // Get the current user's ID
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+      adminPanelViewModel.fetchOrdersById(userId);
+    } else {
+      print('User not authenticated');
+    }
   }
 
   @override
@@ -33,31 +42,34 @@ class _OrderViewState extends State<OrderView> {
     final orders = adminPanelViewModel.orders;
 
     void completeOrder() async {
-      // Complete the order
-      final updatedOrder =
-          await orderViewModel.getOrderById(orders.first['orderID']);
-      if (updatedOrder != null) {
-        // Add the order to the completedOrders collection
-        await orderViewModel.completedOrders(
-            orders.first['orderID'], updatedOrder);
+      if (orders.isNotEmpty) {
+        final updatedOrder =
+            await orderViewModel.getOrderById(orders.first['orderID']);
+        if (updatedOrder != null) {
+          // Add the order to the completedOrders collection
+          await orderViewModel.completedOrders(
+              orders.first['orderID'], updatedOrder);
 
-        /// Delete the order from the orders collection
-        await orderViewModel.deleteOrder(orders.first['orderID']);
+          // Delete the order from the orders collection
+          await orderViewModel.deleteOrder(orders.first['orderID']);
 
-        /// Fetch the updated orders
-        adminPanelViewModel.fetchOrders();
+          // Fetch the updated orders
+          final userId = FirebaseAuth.instance.currentUser?.uid;
+          if (userId != null) {
+            await adminPanelViewModel.fetchOrdersById(userId);
+          }
 
-        /// Notify the user that the order has been completed
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Enjoy your coffee!'),
-          ),
-        );
+          // Notify the user that the order has been completed
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Enjoy your coffee!'),
+            ),
+          );
+        }
       }
     }
 
-    // Get the order status from the first order (assuming only one order is being tracked)
     final orderStatus =
         orders.isNotEmpty ? orders.first['orderStatus'] : 'Pending';
 
