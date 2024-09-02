@@ -25,7 +25,6 @@ class _ProductViewState extends State<ProductView> {
   Widget build(BuildContext context) {
     final product = Provider.of<ProductViewModel>(context).selectedProduct;
 
-
     if (product == null) {
       return Scaffold(
         appBar: AppBar(
@@ -52,11 +51,17 @@ class _ProductViewState extends State<ProductView> {
             /// Product name
             _productName(context, product),
 
+            ///Syrup dropdown
+            if (product.coffeeSize.isNotEmpty) _syrupDropdown(),
+            10.h,
+
             ///Size Selector
             if (product.coffeeSize.isNotEmpty) _sizeSelector(),
+            8.h,
 
             ///About the product and syrup dropdown
             _aboutProduct(),
+            5.h,
 
             ///Product description
             _productDescription(context, product),
@@ -70,16 +75,36 @@ class _ProductViewState extends State<ProductView> {
     );
   }
 
+  Widget _syrupDropdown() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10, left: 40, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('Add Syrup (optional) : ',
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              )),
+          const Spacer(),
+          SyrupDropdown(),
+        ],
+      ),
+    );
+  }
+
   Widget _productImage(BuildContext context, Product product) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      height: MediaQuery.of(context).size.height * 0.33,
-      width: MediaQuery.of(context).size.width * 0.90,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        image: DecorationImage(
-          image: AssetImage(product.imagePath),
-          fit: BoxFit.cover,
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        height: MediaQuery.of(context).size.height * 0.30,
+        width: MediaQuery.of(context).size.width * 0.90,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          image: DecorationImage(
+            image: AssetImage(product.imagePath),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -87,9 +112,8 @@ class _ProductViewState extends State<ProductView> {
 
   Widget _productName(BuildContext context, Product product) {
     return Container(
-      color: Colors.red,
-      width: MediaQuery.of(context).size.width * 0.73,
-      margin: const EdgeInsets.symmetric(vertical: 20),
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       padding: MediaQuery.of(context).size.width > 600
           ? const EdgeInsets.symmetric(horizontal: 100)
           : const EdgeInsets.symmetric(horizontal: 40),
@@ -129,12 +153,6 @@ class _ProductViewState extends State<ProductView> {
             onPressed: () {
               Provider.of<ProductViewModel>(context, listen: false)
                   .updateProductSize(AppStr.sizeButtonTitleLarge);
-              final updatedSize =
-                  Provider.of<ProductViewModel>(context, listen: false)
-                      .selectedProduct
-                      ?.coffeeSize;
-
-              print(updatedSize);
             },
           ),
         ],
@@ -158,15 +176,9 @@ class _ProductViewState extends State<ProductView> {
   Widget _aboutProduct() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Row(
-        children: [
-          Text(
-            AppStr.aboutProduct,
-            style: AppStyle.orderTextStyle,
-          ),
-          const Spacer(),
-          SyrupDropdown(),
-        ],
+      child: Text(
+        AppStr.aboutProduct,
+        style: AppStyle.orderTextStyle,
       ),
     );
   }

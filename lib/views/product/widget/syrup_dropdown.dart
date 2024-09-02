@@ -19,15 +19,24 @@ class SyrupDropdown extends StatelessWidget {
     final productProvider = Provider.of<ProductViewModel>(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      height: MediaQuery.of(context).size.height * 0.04,
+      height: MediaQuery.of(context).size.height * 0.042,
+      width: MediaQuery.of(context).size.width * 0.32,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.primary),
+        gradient: const LinearGradient(
+          colors: [
+            AppColors.secondary,
+            Color.fromARGB(47, 234, 216, 192),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
         color: AppColors.surface,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          elevation: 8,
+          elevation: 24,
           isExpanded: false,
           underline: Container(
             height: 2,

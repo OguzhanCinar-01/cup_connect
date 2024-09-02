@@ -42,7 +42,7 @@ class CoffeeGridItem extends StatelessWidget {
           final selectedProduct = Product(
             name: title,
             description: description,
-            price: price,
+            basePrice: price,
             imagePath: imagePath,
             coffeeSize: coffeSize,
             syrup: syrup,

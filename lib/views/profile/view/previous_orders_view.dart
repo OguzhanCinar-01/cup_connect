@@ -1,4 +1,6 @@
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_styles.dart';
+import 'package:coffee_shop/utils/cupconnect_logo.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,59 +31,88 @@ class _PreviousOrdersState extends State<PreviousOrdersView> {
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         backgroundColor: AppColors.surface,
-        title: const Text('Previous Orders'),
+        toolbarHeight: 70,
+        title: const CupConnectLogo(
+          fontSize: 30,
+          color: Colors.black,
+        ),
+        centerTitle: true,
       ),
-      body: adminPanelViewModel.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : adminPanelViewModel.completedOrders.isEmpty
-              ? const Center(child: Text('No previous orders'))
-              : ListView.builder(
-                  itemCount: adminPanelViewModel.completedOrders.length,
-                  itemBuilder: (context, index) {
-                    final order = adminPanelViewModel.completedOrders[index];
-                    final orderItems = order['order_items'] as List<dynamic>;
-                    return Card(
-                      color: AppColors.secondary,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Order ID: ${order['orderID']}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            Text('Date: ${order['orderDate']}'),
-                            Text('Time: ${order['orderTime']}'),
-                            Text('Status: ${order['orderStatus']}'),
-                            const Divider(color: Colors.white),
-                            ...orderItems.map((item) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        '${item['productName']}:  ${item['size']}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+      body: Column(
+        children: [
+          const Divider(
+            color: AppColors.onSecondary,
+            thickness: 0.2,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 8),
+            alignment: Alignment.topLeft,
+            child:  Text(
+              'Previous Orders',
+              style: AppStyle.titleTextStyle,
+            ),
+          ),
+          const Divider(
+            color: AppColors.onSecondary,
+            thickness: 0.1,
+            endIndent: 180,
+            indent: 35,
+          ),
+          Expanded(
+            child: adminPanelViewModel.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : adminPanelViewModel.completedOrders.isEmpty
+                    ? const Center(child: Text('No previous orders'))
+                    : ListView.builder(
+                        itemCount: adminPanelViewModel.completedOrders.length,
+                        itemBuilder: (context, index) {
+                          final order = adminPanelViewModel.completedOrders[index];
+                          final orderItems = order['order_items'] as List<dynamic>;
+                          return Card(
+                            color: AppColors.secondary,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Order ID: ${order['orderID']}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  Text('Date: ${order['orderDate']}'),
+                                  Text('Time: ${order['orderTime']}'),
+                                  Text('Status: ${order['orderStatus']}'),
+                                  const Divider(color: Colors.white),
+                                  ...orderItems.map((item) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.symmetric(vertical: 5.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              '${item['productName']}:  ${item['size']}',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Text('Syrup: ${item['syrup']}'),
+                                        ],
                                       ),
-                                    ),
-                                    Text('Syrup: ${item['syrup']}'),
-                                  ],
-                                ),
-                              );
-                            }),
-                          ],
-                        ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+          ),
+        ],
+      ),
     );
   }
 }

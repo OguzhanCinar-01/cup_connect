@@ -4,18 +4,28 @@ class Product {
   Product({
     required this.name,
     required this.description,
-    required this.price,
+    required this.basePrice,
     required this.imagePath,
     required this.coffeeSize,
     required this.syrup,
+    this.sizePrices = const {
+      'Small': 0.0,
+      'Medium': 2.0,
+      'Large': 3.0,
+    },
   });
 
   final String name;
   final String description;
-  final double price;
+  final double basePrice;
   final String imagePath;
   String coffeeSize;
   String syrup;
+  final Map<String, double> sizePrices;
+
+  double get price {
+    return basePrice + (sizePrices[coffeeSize] ?? 0.0);
+  }
 }
 
 class ProductViewModel with ChangeNotifier {
