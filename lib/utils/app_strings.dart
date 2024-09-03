@@ -8,5 +8,4 @@ class AppStr{
   static const String goodMorning = 'Goog morning';
   static const String developer = 'Oğuzhan ÇINAR';
   static const String contactMail = 'oguzhancnr1@gmail.com';
-
 }

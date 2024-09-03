@@ -37,7 +37,8 @@ class _RegisterViewState extends State<RegisterView> {
 
     /// get authservice
     final authService = Provider.of<AuthService>(context, listen: false);
-    final firebaseService = Provider.of<FirebaseService>(context, listen: false);
+    final firebaseService =
+        Provider.of<FirebaseService>(context, listen: false);
     try {
       final userCredential = await authService.signUpWithEmailAndPassword(
         emailController.text,
@@ -67,6 +68,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
+
       /// SingleChildScrollView must be added to prevent overflow error
       body: SafeArea(
         child: Center(
@@ -79,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
                   50.h,
                   const CupConnectLogo(),
                   10.h,
-                    
+
                   /// Title
                   const Text(
                     'Join Us',
@@ -90,7 +92,7 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                   ),
                   15.h,
-                    
+
                   Row(
                     children: [
                       ///Name Textfield
@@ -101,7 +103,7 @@ class _RegisterViewState extends State<RegisterView> {
                         width: 180,
                       ),
                       10.w,
-                    
+
                       ///Surname Textfield
                       MyTextField(
                         controller: surnameController,
@@ -112,7 +114,7 @@ class _RegisterViewState extends State<RegisterView> {
                     ],
                   ),
                   10.h,
-                    
+
                   /// Email Textfield
                   MyTextField(
                     controller: emailController,
@@ -120,7 +122,7 @@ class _RegisterViewState extends State<RegisterView> {
                     isPassword: false,
                   ),
                   10.h,
-                    
+
                   /// Password Textfield
                   MyTextField(
                     controller: passwordController,
@@ -135,14 +137,14 @@ class _RegisterViewState extends State<RegisterView> {
                     isPassword: true,
                   ),
                   20.h,
-                    
+
                   /// SignUp Button
                   MyButton(
                     title: 'Register',
                     onTap: signUp,
                   ),
                   15.h,
-                    
+
                   /// Register Line
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

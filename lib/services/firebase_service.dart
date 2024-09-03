@@ -169,7 +169,8 @@ class FirebaseService extends ChangeNotifier {
       rethrow;
     }
   }
-  /// Get order by User ID 
+
+  /// Get order by User ID
   Future<List<Map<String, dynamic>>> getOrderByUserId(String userId) async {
     try {
       final QuerySnapshot querySnapshot = await _firestore
@@ -184,5 +185,4 @@ class FirebaseService extends ChangeNotifier {
       return [];
     }
   }
-
 }

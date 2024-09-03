@@ -2,6 +2,7 @@ import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/product_data_view_model.dart';
+import 'package:coffee_shop/views/home/viewmodel/search_view_model.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/my_circular_progress_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,13 +35,31 @@ class _HomeViewState extends State<HomeView> {
   bool _isloading = true;
 
   final FirebaseService _firebaseService = FirebaseService();
+  final TextEditingController _searchController = TextEditingController();
+
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+
     String? userId = FirebaseAuth.instance.currentUser!.uid;
     _userNameFuture = _firebaseService.getUserName(userId);
+    _searchController.addListener(onSearchChanged);
+
     _loadUserData();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchController.removeListener(onSearchChanged);
+    super.dispose();
+  }
+
+  void onSearchChanged() {
+    Provider.of<SearchViewModel>(context, listen: false).searchQuery =
+        _searchController.text;
   }
 
   Future<void> _loadUserData() async {
@@ -81,31 +100,36 @@ class _HomeViewState extends State<HomeView> {
       child: Scaffold(
         backgroundColor: AppColors.surface,
         appBar: const HomeViewAppBar(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Divider(
-              color: Colors.black,
-              thickness: 0.2,
-            ),
-
-            /// Good morning text
-            _isloading
-                ? const Center(child: MyCircularProgressIndicator())
-                : _goodMorningText(_userName),
-
-            20.h,
-
-            /// Search bar
-            _searchBar(context),
-            10.h,
-
-            /// TabBar
-            _tabBar(context),
-
-            /// TabBarView
-            _tabBarView(),
-          ],
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Divider(
+                color: Colors.black,
+                thickness: 0.2,
+              ),
+          
+              /// Good morning text
+              _isloading
+                  ? const Center(child: MyCircularProgressIndicator())
+                  : _goodMorningText(_userName),
+          
+              20.h,
+          
+              /// Search bar
+              _searchBar(context),
+              10.h,
+          
+              /// TabBar
+              _tabBar(context),
+          
+              /// TabBarView
+              _tabBarView(),
+            ],
+          ),
         ),
 
         /// BottomNavigationBar
@@ -162,6 +186,8 @@ class _HomeViewState extends State<HomeView> {
           ? const EdgeInsets.symmetric(horizontal: 100)
           : const EdgeInsets.symmetric(horizontal: 30),
       child: TextField(
+        focusNode: _focusNode,
+        controller: _searchController,
         decoration: InputDecoration(
           hintText: AppStr.searchHintText,
           hintStyle: AppStyle.orderTextStyle,
