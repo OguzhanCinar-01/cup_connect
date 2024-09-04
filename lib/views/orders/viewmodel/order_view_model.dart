@@ -34,6 +34,24 @@ class Order {
 class OrderViewModel extends ChangeNotifier {
   List<Order> orders = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool _hasCompletedOrders = false;
+
+  bool get hasCompletedOrders => _hasCompletedOrders;
+
+  // Örnek bir fonksiyon siparişlerin durumunu kontrol eder
+  Future<void> checkCompletedOrders() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) return;
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('orders')
+        .where('userId', isEqualTo: currentUser.uid)
+        .where('orderStatus', isEqualTo: 'Completed')
+        .get();
+    _hasCompletedOrders = querySnapshot.docs.isNotEmpty;
+    notifyListeners();
+    print('Completed Orders Updated: $_hasCompletedOrders');
+  }
 
   /// Add order to the list
   void addOrder(Order order) {
@@ -80,59 +98,6 @@ class OrderViewModel extends ChangeNotifier {
       removeOrder(order);
     }
     notifyListeners();
-  }
-
-  /// Submit order
-  Future<void> submitOrder() async {
-    final firestore = FirebaseFirestore.instance;
-
-    /// Get the current date and time
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('dd/MM/yyyy').format(now);
-    String formattedTime = DateFormat('HH:mm').format(now);
-
-    /// Generate a unique order ID
-    var uuid = const Uuid();
-    String orderID = uuid.v4();
-    orderID = orderID.substring(0, 8);
-
-    // Kullanıcının email'ini al
-    final String? email =
-        await getCurrentUserEmail(); // Burada email'i alacak bir yöntem kullanıyoruz
-
-    if (email == null) return;
-
-    // Kullanıcı kimliğini al
-    String? userId = await getUserId(email);
-
-    try {
-      // Adding order to the database with the orderID in this way
-      // allows us to easily query the order later
-      if (orders.isNotEmpty) {
-        await firestore.collection('orders').doc(orderID).set({
-          'orderID': orderID,
-          'orderDate': formattedDate,
-          'orderTime': formattedTime,
-          'orderStatus': 'Pending',
-          'userId': userId,
-          'order_items': orders
-              .map((order) => {
-                    'productName': order.productName,
-                    'syrup': order.syrup,
-                    'size': order.size,
-                    'price': order.price,
-                    'quantity': order.quantity,
-                  })
-              .toList(),
-        });
-
-        // Clear the orders list
-        orders.clear();
-        notifyListeners();
-      }
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<String?> getCurrentUserEmail() async {
@@ -249,6 +214,79 @@ class OrderViewModel extends ChangeNotifier {
     } catch (e) {
       print('Error fetching user ID: $e');
       return null;
+    }
+  }
+
+  /// Check if user can place a new order
+  Future<bool> canPlaceNewOrder() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return false;
+    }
+
+    QuerySnapshot<Map<String, dynamic>> ordersSnapshot = await FirebaseFirestore
+        .instance
+        .collection('orders')
+        .where('userId', isEqualTo: currentUser.uid)
+        .where('orderStatus', isNotEqualTo: 'Completed')
+        .get();
+
+    return ordersSnapshot.docs.isEmpty;
+  }
+
+  /// Submit order
+  Future<void> submitOrder() async {
+    final firestore = FirebaseFirestore.instance;
+
+    /// Get the current date and time
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd/MM/yyyy').format(now);
+    String formattedTime = DateFormat('HH:mm').format(now);
+
+    /// Generate a unique order ID
+    var uuid = const Uuid();
+    String orderID = uuid.v4();
+    orderID = orderID.substring(0, 8);
+
+    // Kullanıcının email'ini al
+    final String? email =
+        await getCurrentUserEmail(); // Burada email'i alacak bir yöntem kullanıyoruz
+
+    if (email == null) return;
+
+    // Kullanıcı kimliğini al
+    String? userId = await getUserId(email);
+
+    try {
+      // Adding order to the database with the orderID in this way
+      // allows us to easily query the order later
+      if (orders.isNotEmpty) {
+        await firestore.collection('orders').doc(orderID).set({
+          'orderID': orderID,
+          'orderDate': formattedDate,
+          'orderTime': formattedTime,
+          'orderStatus': 'Pending',
+          'userId': userId,
+          'order_items': orders
+              .map((order) => {
+                    'productName': order.productName,
+                    'syrup': order.syrup,
+                    'size': order.size,
+                    'price': order.price,
+                    'quantity': order.quantity,
+                  })
+              .toList(),
+        });
+
+        // Clear the orders list
+        orders.clear();
+        notifyListeners();
+
+        // Check for completed orders
+        await checkCompletedOrders();
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -24,7 +24,7 @@ class _OrderViewState extends State<OrderView> {
     // Fetch orders when the widget is initialized
     final adminPanelViewModel =
         Provider.of<AdminPanelViewModel>(context, listen: false);
-    
+
     // Get the current user's ID
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -45,7 +45,10 @@ class _OrderViewState extends State<OrderView> {
       if (orders.isNotEmpty) {
         final updatedOrder =
             await orderViewModel.getOrderById(orders.first['orderID']);
-        if (updatedOrder != null) {
+        final orderStatus = orders.first['orderStatus'];
+
+        /// If order is found, update the order status to 'Completed'
+        if (updatedOrder != null && orderStatus == 'Completed') {
           // Add the order to the completedOrders collection
           await orderViewModel.completedOrders(
               orders.first['orderID'], updatedOrder);
@@ -58,6 +61,7 @@ class _OrderViewState extends State<OrderView> {
           if (userId != null) {
             await adminPanelViewModel.fetchOrdersById(userId);
           }
+          await orderViewModel.checkCompletedOrders();
 
           // Notify the user that the order has been completed
           // ignore: use_build_context_synchronously
@@ -177,7 +181,13 @@ class _OrderViewState extends State<OrderView> {
             ),
 
             /// Complete Order button
-            MyButton(onTap: completeOrder, title: 'Complete Order'),
+            MyButton(
+              onTap: completeOrder,
+              title: 'Complete Order',
+              color: orderStatus == 'Completed'
+                  ? AppColors.primary
+                  : AppColors.completeOrderButtonColor,
+            ),
           ],
         ),
       ),

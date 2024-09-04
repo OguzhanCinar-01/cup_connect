@@ -2,7 +2,6 @@ import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/services/auth/auth_service.dart';
-import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/home_view_model.dart';
@@ -10,8 +9,8 @@ import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/home_view_app_bar.dart';
 import 'package:coffee_shop/views/profile/view/about_view.dart';
 import 'package:coffee_shop/views/profile/view/previous_orders_view.dart';
+import 'package:coffee_shop/views/profile/viewmodel/profile_view_model.dart';
 import 'package:coffee_shop/views/profile/widget/my_card.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,43 +22,10 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  /// Getting user data from Firebase
-  final FirebaseService _firebaseService = FirebaseService();
-  String _userName = 'User';
-  String _userSurname = '';
-  bool _isloading = true;
-
   @override
   void initState() {
     super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    try {
-      String? userId = FirebaseAuth.instance.currentUser?.uid;
-
-      if (userId != null) {
-        String? userName = await _firebaseService.getUserName(userId);
-        String? userSurname = await _firebaseService.getUserSurname(userId);
-
-        setState(() {
-          _userName = userName != null && userName.isNotEmpty
-              ? userName[0].toUpperCase() + userName.substring(1)
-              : 'User';
-
-          _userSurname = userSurname.isNotEmpty
-              ? userSurname[0].toUpperCase() + userSurname.substring(1)
-              : '';
-          _isloading = false;
-        });
-      }
-    } catch (e) {
-      print('Error loading user data: $e');
-      setState(() {
-        _isloading = false;
-      });
-    }
+    Provider.of<ProfileViewModel>(context, listen: false).loadUserData();
   }
 
   void signOut() {
@@ -79,6 +45,8 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context);
+
     return Scaffold(
       backgroundColor: AppColors.surface,
       appBar: const HomeViewAppBar(),
@@ -121,11 +89,11 @@ class _ProfileViewState extends State<ProfileView> {
                 20.w,
 
                 /// Profile User Text
-                if (_isloading)
+                if (profileViewModel.isLoading)
                   const CircularProgressIndicator()
                 else
                   Text(
-                    '$_userName $_userSurname',
+                    '${profileViewModel.userName} ${profileViewModel.userSurname}',
                     style: AppStyle.profileText,
                   ),
                 const Spacer(),

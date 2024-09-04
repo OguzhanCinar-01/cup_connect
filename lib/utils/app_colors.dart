@@ -14,4 +14,6 @@ class AppColors {
   
   static Color orderStatusRed = const Color.fromARGB(255, 255, 204, 203);
   static Color orderStatusGreen = const Color.fromARGB(255, 198, 221, 203);
+
+  static Color completeOrderButtonColor = const Color.fromRGBO(181, 145, 132, 1);
 }

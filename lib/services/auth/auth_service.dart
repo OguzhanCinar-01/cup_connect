@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coffee_shop/navigation/navigation_manager.dart';
+import 'package:coffee_shop/views/adminPanel/view/admin_panel_view.dart';
+import 'package:coffee_shop/views/home/view/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +18,21 @@ class AuthService extends ChangeNotifier {
         email: email,
         password: password,
       );
+      String userId = userCredential.user!.uid;
+
+      /// Get user role
+      DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      String role = userDoc.get('role');    
+
+      if(role == 'admin') {
+        /// Navigate to admin panel
+        NavigationManager.instance.navigateToPageClear(const AdminPanelView());
+      } else {
+        /// Navigate to home page
+        NavigationManager.instance.navigateToPageClear(const HomeView());
+      }
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);

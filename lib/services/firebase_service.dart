@@ -93,6 +93,7 @@ class FirebaseService extends ChangeNotifier {
           'name': name,
           'surname': surname,
           'email': email,
+          'role': 'user',
         });
       } else {
         throw Exception("No user is currently signed in.");
@@ -117,8 +118,10 @@ class FirebaseService extends ChangeNotifier {
   /// Get admin panel data from firestore
   Future<List<Map<String, dynamic>>> getAdminPanelData() async {
     try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('orders').get();
+      final snapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .orderBy('orderDate', descending: true)
+          .get();
       print('Admin panel data fetched successfully');
       return snapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
@@ -130,8 +133,10 @@ class FirebaseService extends ChangeNotifier {
   /// Get completed orders
   Future<List<Map<String, dynamic>>> getCompletedOrdersData() async {
     try {
-      final QuerySnapshot querySnapshot =
-          await _firestore.collection('completedOrders').get();
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection('completed_rrders')
+          .orderBy('orderDate', descending: true)
+          .get();
       print('Completed orders fetched successfully');
       return querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)
@@ -176,6 +181,7 @@ class FirebaseService extends ChangeNotifier {
       final QuerySnapshot querySnapshot = await _firestore
           .collection('orders')
           .where('userId', isEqualTo: userId)
+          .orderBy('orderDate', descending: true)
           .get();
       return querySnapshot.docs
           .map((doc) => doc.data() as Map<String, dynamic>)

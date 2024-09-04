@@ -17,7 +17,7 @@ class AdminPanelViewModel extends ChangeNotifier {
   Future<void> fetchOrders() async {
     _isLoading = true;
     notifyListeners();
-    _orders = await FirebaseService().getAdminPanelData();
+    _orders = await _firebaseService.getAdminPanelData();
     _isLoading = false;
     notifyListeners();
   }
@@ -25,7 +25,7 @@ class AdminPanelViewModel extends ChangeNotifier {
   Future<void> fetchOrdersById(String orderId) async {
     _isLoading = true;
     notifyListeners();
-    _orders = await FirebaseService().getOrderByUserId(orderId);
+    _orders = await _firebaseService.getOrderByUserId(orderId);
     _isLoading = false;
     notifyListeners();
   }
@@ -38,7 +38,7 @@ class AdminPanelViewModel extends ChangeNotifier {
     try {
       // Firestore'dan completed_orders koleksiyonunu çekin
       final completedOrdersSnapshot = await FirebaseFirestore.instance
-          .collection('completed_orders')
+          .collection('completed_orders').orderBy('orderDate', descending: true)
           .get();
 
       _completedOrders = completedOrdersSnapshot.docs

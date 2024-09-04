@@ -1,12 +1,11 @@
-import 'package:coffee_shop/services/firebase_service.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
+import 'package:coffee_shop/views/home/viewmodel/load_user_view_model.dart';
 import 'package:coffee_shop/views/home/viewmodel/product_data_view_model.dart';
 import 'package:coffee_shop/views/home/viewmodel/search_view_model.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
 import 'package:coffee_shop/views/home/widget/my_circular_progress_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../../extensions/space_exs.dart';
 import '../../../utils/app_colors.dart';
 import '../widget/home_view_app_bar.dart';
@@ -30,11 +29,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  late Future<String?> _userNameFuture;
-  String _userName = '';
-  bool _isloading = true;
-
-  final FirebaseService _firebaseService = FirebaseService();
   final TextEditingController _searchController = TextEditingController();
 
   final FocusNode _focusNode = FocusNode();
@@ -44,10 +38,8 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
 
     String? userId = FirebaseAuth.instance.currentUser!.uid;
-    _userNameFuture = _firebaseService.getUserName(userId);
     _searchController.addListener(onSearchChanged);
-
-    _loadUserData();
+    Provider.of<LoadUserViewModel>(context, listen: false).loadUserData(userId);
   }
 
   @override
@@ -60,22 +52,6 @@ class _HomeViewState extends State<HomeView> {
   void onSearchChanged() {
     Provider.of<SearchViewModel>(context, listen: false).searchQuery =
         _searchController.text;
-  }
-
-  Future<void> _loadUserData() async {
-    try {
-      String? userName = await _userNameFuture;
-      setState(() {
-        _userName = userName ?? 'User';
-        _userName = _userName[0].toUpperCase() + _userName.substring(1);
-        _isloading = false;
-      });
-    } catch (e) {
-      print('Error: $e');
-      setState(() {
-        _isloading = false;
-      });
-    }
   }
 
   List<Widget> myTabs = [
@@ -95,6 +71,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final loadUserViewModel = Provider.of<LoadUserViewModel>(context);
     return DefaultTabController(
       length: myTabs.length,
       child: Scaffold(
@@ -111,21 +88,21 @@ class _HomeViewState extends State<HomeView> {
                 color: Colors.black,
                 thickness: 0.2,
               ),
-          
+
               /// Good morning text
-              _isloading
+              loadUserViewModel.isLoading
                   ? const Center(child: MyCircularProgressIndicator())
-                  : _goodMorningText(_userName),
-          
+                  : _goodMorningText(loadUserViewModel.userName),
+
               20.h,
-          
+
               /// Search bar
               _searchBar(context),
               10.h,
-          
+
               /// TabBar
               _tabBar(context),
-          
+
               /// TabBarView
               _tabBarView(),
             ],

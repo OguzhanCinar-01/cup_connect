@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyButton extends StatelessWidget {
-  const MyButton({super.key, required this.onTap, required this.title});
+  const MyButton({super.key, required this.onTap, required this.title, required this.color});
   final void Function() onTap;
   final String title;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class MyButton extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: AppColors.primary,
+          color: color,
         ),
         child: Center(
           child: Text(

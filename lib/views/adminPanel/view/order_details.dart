@@ -27,9 +27,14 @@ class OrderDetails extends StatelessWidget {
       backgroundColor: AppColors.surface,
       appBar: AppBar(
         title: const Text('Order Details'),
+        backgroundColor: AppColors.surface,
       ),
       body: Column(
         children: [
+          const Divider(
+            thickness: 0.1,
+            color: AppColors.onSecondary,
+          ),
           Text(
             'Order ID: ${order['orderID']}',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -122,11 +127,7 @@ class OrderDetails extends StatelessWidget {
                       /// Update order status to 'Completed'
                       await orderViewModel.updateOrderStatus(
                           order['orderID'], 'Completed');
-
-                      // Optionally, you can fetch updated order to check if status is changed
-                      final updatedOrder =
-                          await orderViewModel.getOrderById(order['orderID']);
-                          print('Updated order: $updatedOrder');
+                      await orderViewModel.checkCompletedOrders();
 
                       showDialog(
                         // ignore: use_build_context_synchronously

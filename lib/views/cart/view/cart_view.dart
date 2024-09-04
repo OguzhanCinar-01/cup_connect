@@ -27,31 +27,53 @@ class _CartViewState extends State<CartView> {
       final OrderViewModel orderViewModel =
           Provider.of<OrderViewModel>(context, listen: false);
 
-      if (orderViewModel.orders.isNotEmpty) {
-        await orderViewModel.submitOrder();
-        showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Your order has been placed successfully!'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
+      bool canPlaceOrder = await orderViewModel.canPlaceNewOrder();
+
+      if (canPlaceOrder) {
+        if (orderViewModel.orders.isNotEmpty) {
+          await orderViewModel.submitOrder();
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Success'),
+              content: const Text('Your order has been placed successfully!'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Your should add items to cart first!'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        }
       } else {
         showDialog(
           // ignore: use_build_context_synchronously
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Error'),
-            content: const Text('Your should add items to cart first!'),
+            content: const Text(
+                'You have an incomplete order. Please complete it before placing a new one.'),
             actions: <Widget>[
               TextButton(
                 child: const Text('OK'),
@@ -136,6 +158,7 @@ class _CartViewState extends State<CartView> {
           MyButton(
             onTap: addToOrders,
             title: 'Order Now',
+            color: AppColors.primary,
           ),
         ],
       ),

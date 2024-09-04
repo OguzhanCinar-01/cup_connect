@@ -2,6 +2,7 @@ import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/services/auth/auth_service.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/utils/cupconnect_logo.dart';
 import 'package:coffee_shop/views/adminPanel/view/order_details.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
@@ -116,9 +117,13 @@ class _AdminPanelViewState extends State<AdminPanelView>
   Widget _buildOrdersTab() {
     return Consumer<AdminPanelViewModel>(
       builder: (context, viewModel, child) {
+        /// Check if orders are completed
+        final isCompleted = viewModel.orders
+            .every((order) => order['orderStatus'] == 'Completed');
+
         if (viewModel.isLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (viewModel.orders.isEmpty) {
+        } else if (viewModel.orders.isEmpty || isCompleted) {
           return const Center(child: Text('No orders found.'));
         } else {
           /// Display orders
@@ -209,60 +214,94 @@ class _AdminPanelViewState extends State<AdminPanelView>
         } else if (viewModel.completedOrders.isEmpty) {
           return const Center(child: Text('No completed orders found.'));
         } else {
-          // Completed orders'ı göstermek için her iki listeyi birleştirin
+          // Add completed orders to the list of orders
           final completedOrders = [
             ...viewModel.orders
                 .where((order) => order['orderStatus'] == 'Completed'),
             ...viewModel.completedOrders,
           ];
 
-          return ListView.builder(
-            itemCount: completedOrders.length,
-            itemBuilder: (context, index) {
-              final orderData = completedOrders[index];
-              final orderItems = orderData['order_items'] as List<dynamic>;
+          double totalPrice = 0;
+          for (var order in completedOrders) {
+            final orderItems = order['order_items'] as List<dynamic>;
+            for (var item in orderItems) {
+              totalPrice += item['price'] * item['quantity'];
+            }
+          }
 
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: Card(
-                  color: AppColors.secondary,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Order ID: ${orderData['orderID']}',
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
-                        Text('Date: ${orderData['orderDate']}'),
-                        Text('Time: ${orderData['orderTime']}'),
-                        Text('Status: ${orderData['orderStatus']}'),
-                        const Divider(color: Colors.white),
-                        ...orderItems.map((item) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    '${item['productName']}:  ${item['size']}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: completedOrders.length,
+                  itemBuilder: (context, index) {
+                    final orderData = completedOrders[index];
+                    final orderItems =
+                        orderData['order_items'] as List<dynamic>;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 5),
+                      child: Card(
+                        color: AppColors.secondary,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Order ID: ${orderData['orderID']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              Text('Date: ${orderData['orderDate']}'),
+                              Text('Time: ${orderData['orderTime']}'),
+                              Text('Status: ${orderData['orderStatus']}'),
+                              const Divider(color: Colors.white),
+                              ...orderItems.map((item) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          '${item['productName']}:  ${item['size']}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text('Syrup: ${item['syrup']}'),
+                                    ],
                                   ),
-                                ),
-                                Text('Syrup: ${item['syrup']}'),
-                              ],
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+              const Divider(
+                color: AppColors.onSecondary,
+                thickness: 0.2,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 10),
+                child: Row(
+                  children: [
+                    Text('Total Orders: ${completedOrders.length}',
+                        style: AppStyle.orderDetailsPrice),
+                    const Spacer(),
+                    Text('Total: \$${totalPrice.toStringAsFixed(2)}',
+                        style: AppStyle.orderDetailsPrice),
+                  ],
+                ),
+              ),
+            ],
           );
         }
       },
