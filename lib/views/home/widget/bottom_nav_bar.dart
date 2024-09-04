@@ -64,6 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 },
                 isSelected: homeViewModel.currentIndex == 1,
                 isCompleted: hasCompletedOrders,
+                
               ),
               _NavbarItem(
                 homeRounded: Icons.shopping_cart_rounded,

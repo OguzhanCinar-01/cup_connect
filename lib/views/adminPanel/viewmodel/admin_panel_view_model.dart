@@ -6,7 +6,7 @@ class AdminPanelViewModel extends ChangeNotifier {
   final FirebaseService _firebaseService = FirebaseService();
 
   List<Map<String, dynamic>> _orders = [];
-   List<Map<String, dynamic>> _completedOrders = [];
+  List<Map<String, dynamic>> _completedOrders = [];
   bool _isLoading = false;
 
   List<Map<String, dynamic>> get orders => _orders;
@@ -21,6 +21,7 @@ class AdminPanelViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
   /// Fetch orders by ID
   Future<void> fetchOrdersById(String orderId) async {
     _isLoading = true;
@@ -38,12 +39,13 @@ class AdminPanelViewModel extends ChangeNotifier {
     try {
       // Firestore'dan completed_orders koleksiyonunu çekin
       final completedOrdersSnapshot = await FirebaseFirestore.instance
-          .collection('completed_orders').orderBy('orderDate', descending: true)
+          .collection('completed_orders')
+          .orderBy('orderDate', descending: true)
+          .orderBy('orderTime', descending: true)
           .get();
 
-      _completedOrders = completedOrdersSnapshot.docs
-          .map((doc) => doc.data())
-          .toList();
+      _completedOrders =
+          completedOrdersSnapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
       print('Error fetching completed orders: $e');
     }
@@ -93,26 +95,25 @@ class AdminPanelViewModel extends ChangeNotifier {
       rethrow;
     }
   }
+
   /// Get completed order by UserID
   Future<void> fetchCompletedOrdersbyUserID(String userId) async {
-  _isLoading = true;
-  notifyListeners();
+    _isLoading = true;
+    notifyListeners();
 
-  try {
-    final completedOrdersSnapshot = await FirebaseFirestore.instance
-        .collection('completed_orders')
-        .where('userId', isEqualTo: userId)
-        .get();
-        
+    try {
+      final completedOrdersSnapshot = await FirebaseFirestore.instance
+          .collection('completed_orders')
+          .where('userId', isEqualTo: userId)
+          .get();
 
-    _completedOrders = completedOrdersSnapshot.docs
-        .map((doc) => doc.data())
-        .toList();
-  } catch (e) {
-    print('Error fetching completed orders: $e');
+      _completedOrders =
+          completedOrdersSnapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      print('Error fetching completed orders: $e');
+    }
+
+    _isLoading = false;
+    notifyListeners();
   }
-
-  _isLoading = false;
-  notifyListeners();
-}
 }

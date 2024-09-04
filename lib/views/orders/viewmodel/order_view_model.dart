@@ -38,7 +38,7 @@ class OrderViewModel extends ChangeNotifier {
 
   bool get hasCompletedOrders => _hasCompletedOrders;
 
-  // Örnek bir fonksiyon siparişlerin durumunu kontrol eder
+  // Check if the user has completed orders
   Future<void> checkCompletedOrders() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) return;
@@ -50,7 +50,7 @@ class OrderViewModel extends ChangeNotifier {
         .get();
     _hasCompletedOrders = querySnapshot.docs.isNotEmpty;
     notifyListeners();
-    print('Completed Orders Updated: $_hasCompletedOrders');
+    print('Check Completed Orders Updated: $_hasCompletedOrders');
   }
 
   /// Add order to the list

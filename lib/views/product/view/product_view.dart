@@ -1,5 +1,6 @@
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_show_messages.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/orders/viewmodel/order_view_model.dart';
@@ -198,21 +199,9 @@ class _ProductViewState extends State<ProductView> {
             size: product.coffeeSize,
             syrup: product.syrup,
           );
-          showDialog(
-            // ignore: use_build_context_synchronously
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Success'),
-              content: const Text('Your order added to cart'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+          AppShowMessages.showSuccessDialog(
+            context,
+            'Item added to cart.',
           );
 
           Provider.of<OrderViewModel>(context, listen: false).addOrder(order);

@@ -1,3 +1,4 @@
+import 'package:coffee_shop/utils/app_show_messages.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/card_view_model.dart';
@@ -129,44 +130,13 @@ class OrderDetails extends StatelessWidget {
                           order['orderID'], 'Completed');
                       await orderViewModel.checkCompletedOrders();
 
-                      showDialog(
-                        // ignore: use_build_context_synchronously
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Info'),
-                          content: const Text(
-                              'Order has been completed successfully'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+                      AppShowMessages.showInfoDialog(
+                          context, 'Order completed successfully');
                       adminPanelViewModel.fetchOrders();
                       adminPanelViewModel.fetchCompletedOrders();
                     } catch (e) {
-                      showDialog(
-                        // ignore: use_build_context_synchronously
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Error'),
-                          content: const Text(
-                              'An error occurred while completing the order'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+                      AppShowMessages.showErrorDialog(context,
+                          'An error occurred while completing the order');
                     }
                   },
                   child: Container(

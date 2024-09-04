@@ -30,6 +30,7 @@ class _OrderViewState extends State<OrderView> {
 
     if (userId != null) {
       adminPanelViewModel.fetchOrdersById(userId);
+      print('Order Fetched');
     } else {
       print('User not authenticated');
     }
@@ -60,8 +61,10 @@ class _OrderViewState extends State<OrderView> {
           final userId = FirebaseAuth.instance.currentUser?.uid;
           if (userId != null) {
             await adminPanelViewModel.fetchOrdersById(userId);
+            print('completedORder data fetched');
+            await orderViewModel.checkCompletedOrders();
+            print('completedOrders: ${orderViewModel.completedOrders}');
           }
-          await orderViewModel.checkCompletedOrders();
 
           // Notify the user that the order has been completed
           // ignore: use_build_context_synchronously

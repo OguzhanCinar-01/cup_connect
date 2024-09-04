@@ -134,7 +134,7 @@ class FirebaseService extends ChangeNotifier {
   Future<List<Map<String, dynamic>>> getCompletedOrdersData() async {
     try {
       final QuerySnapshot querySnapshot = await _firestore
-          .collection('completed_rrders')
+          .collection('completed_orders')
           .orderBy('orderDate', descending: true)
           .get();
       print('Completed orders fetched successfully');

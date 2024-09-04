@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_show_messages.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/cart/widget/cart_added_item.dart';
 import 'package:coffee_shop/views/cart/widget/order_now_button.dart';
@@ -32,57 +35,20 @@ class _CartViewState extends State<CartView> {
       if (canPlaceOrder) {
         if (orderViewModel.orders.isNotEmpty) {
           await orderViewModel.submitOrder();
-          showDialog(
-            // ignore: use_build_context_synchronously
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Success'),
-              content: const Text('Your order has been placed successfully!'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+          AppShowMessages.showSuccessDialog(
+            context,
+            'Order placed successfully.',
           );
         } else {
-          showDialog(
-            // ignore: use_build_context_synchronously
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Error'),
-              content: const Text('Your should add items to cart first!'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+          AppShowMessages.showErrorDialog(
+            context,
+            'You have no items in your cart.',
           );
         }
       } else {
-        showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: const Text(
-                'You have an incomplete order. Please complete it before placing a new one.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
+        AppShowMessages.showErrorDialog(
+          context,
+          'You have an active order. Please wait for it to be completed.',
         );
       }
     }

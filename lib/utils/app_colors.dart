@@ -16,4 +16,7 @@ class AppColors {
   static Color orderStatusGreen = const Color.fromARGB(255, 198, 221, 203);
 
   static Color completeOrderButtonColor = const Color.fromRGBO(181, 145, 132, 1);
+
+  static Color showSuccessDialogColor = const Color.fromARGB(255, 24, 85, 25);
+  static Color showInfoDialogColor = const Color.fromARGB(255, 3, 52, 110);
 }
