@@ -78,7 +78,7 @@ class AppShowMessages {
     );
   }
 
-  static void showSuccessDialog(BuildContext context, String message) {
+  static Future<void> showSuccessDialog(BuildContext context, String message) async {
     showDialog(
       // ignore: use_build_context_synchronously
       context: context,
@@ -229,4 +229,5 @@ class AppShowMessages {
       }
     );
   }
+
 }

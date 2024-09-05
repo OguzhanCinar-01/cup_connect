@@ -41,7 +41,6 @@ class AdminPanelViewModel extends ChangeNotifier {
       final completedOrdersSnapshot = await FirebaseFirestore.instance
           .collection('completed_orders')
           .orderBy('orderDate', descending: true)
-          .orderBy('orderTime', descending: true)
           .get();
 
       _completedOrders =
