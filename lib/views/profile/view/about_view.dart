@@ -1,5 +1,6 @@
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/utils/cupconnect_logo.dart';
@@ -26,10 +27,7 @@ class AboutView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           /// Divider
-          const Divider(
-            color: AppColors.onSecondary,
-            thickness: 0.2,
-          ),
+          AppDividers.homeViewDivider,
 
           /// About Us
           Padding(
@@ -40,11 +38,7 @@ class AboutView extends StatelessWidget {
             ),
           ),
           /// Divider
-          const Divider(
-            color: AppColors.onSecondary,
-            thickness: 0.1,
-            endIndent: 230,
-          ),
+          AppDividers.aboutUsDivider,
           15.h,
 
           /// About Us Text

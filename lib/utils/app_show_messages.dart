@@ -1,5 +1,6 @@
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:flutter/material.dart';
 
 class AppShowMessages {
@@ -29,10 +30,7 @@ class AppShowMessages {
                     ),
                   ),
                 ),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.5,
-                ),
+                AppDividers.showMessaseDialogDivider,
                 15.h,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -105,10 +103,7 @@ class AppShowMessages {
                     ),
                   ),
                 ),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.5,
-                ),
+                AppDividers.showMessaseDialogDivider,
                 15.h,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -181,10 +176,7 @@ class AppShowMessages {
                     ),
                   ),
                 ),
-                const Divider(
-                  color: Colors.black,
-                  thickness: 0.5,
-                ),
+                AppDividers.showMessaseDialogDivider,
                 15.h,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),

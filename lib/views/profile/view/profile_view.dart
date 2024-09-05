@@ -3,6 +3,7 @@ import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/services/auth/auth_service.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/home_view_model.dart';
 import 'package:coffee_shop/views/home/widget/bottom_nav_bar.dart';
@@ -52,10 +53,7 @@ class _ProfileViewState extends State<ProfileView> {
       appBar: const HomeViewAppBar(),
       body: Column(
         children: [
-          const Divider(
-            color: AppColors.onSecondary,
-            thickness: 0.2,
-          ),
+          AppDividers.homeViewDivider,
           Row(
             children: [
               35.w,

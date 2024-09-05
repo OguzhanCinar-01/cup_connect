@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:coffee_shop/extensions/space_exs.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_show_messages.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
@@ -35,10 +36,7 @@ class OrderDetails extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const Divider(
-            thickness: 0.1,
-            color: AppColors.onSecondary,
-          ),
+          AppDividers.homeViewDivider,
           Text(
             'Order ID: ${order['orderID']}',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -46,7 +44,7 @@ class OrderDetails extends StatelessWidget {
           Text('Date: ${order['orderDate']}'),
           Text('Time: ${order['orderTime']}'),
           Text('Status: ${order['orderStatus']}'),
-          const Divider(),
+          AppDividers.homeViewDivider,
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: MediaQuery.of(context).size.height * 0.645,
@@ -161,10 +159,7 @@ class OrderDetails extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const Divider(
-                                    color: Colors.black,
-                                    thickness: 0.5,
-                                  ),
+                                  AppDividers.showMessaseDialogDivider,
                                   15.h,
                                   const Padding(
                                     padding:

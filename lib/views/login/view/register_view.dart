@@ -1,4 +1,5 @@
 import 'package:coffee_shop/services/firebase_service.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
@@ -71,106 +72,121 @@ class _RegisterViewState extends State<RegisterView> {
 
       /// SingleChildScrollView must be added to prevent overflow error
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  50.h,
-                  const CupConnectLogo(),
-                  10.h,
-
-                  /// Title
-                  const Text(
-                    'Join Us',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primary,
+                AppColors.primarySurface,
+                AppColors.primary,
+                AppColors.primarySurface,
+              ],
+            ),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    50.h,
+                    const CupConnectLogo(),
+                    50.h,
+          
+                    /// Title
+                    const Text(
+                      'Join Us',
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  15.h,
-
-                  Row(
-                    children: [
-                      ///Name Textfield
-                      MyTextField(
-                        controller: nameController,
-                        hint: 'Name',
-                        isPassword: false,
-                        width: 180,
-                      ),
-                      10.w,
-
-                      ///Surname Textfield
-                      MyTextField(
-                        controller: surnameController,
-                        hint: 'Surname',
-                        isPassword: false,
-                        width: 180,
-                      )
-                    ],
-                  ),
-                  10.h,
-
-                  /// Email Textfield
-                  MyTextField(
-                    controller: emailController,
-                    hint: 'Email',
-                    isPassword: false,
-                  ),
-                  10.h,
-
-                  /// Password Textfield
-                  MyTextField(
-                    controller: passwordController,
-                    hint: 'Password',
-                    isPassword: true,
-                  ),
-                  10.h,
-                  // Confirm Password Textfield
-                  MyTextField(
-                    controller: confirmPasswordController,
-                    hint: 'Confirm Password',
-                    isPassword: true,
-                  ),
-                  20.h,
-
-                  /// SignUp Button
-                  MyButton(
-                    title: 'Register',
-                    onTap: signUp,
-                  ),
-                  15.h,
-
-                  /// Register Line
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Already have an account?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
+                    AppDividers.registerDivider,
+                    15.h,
+          
+                    Row(
+                      children: [
+                        ///Name Textfield
+                        MyTextField(
+                          controller: nameController,
+                          hint: 'Name',
+                          isPassword: false,
+                          width: 180,
                         ),
-                      ),
-                      7.w,
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text(
-                          'Login',
+                        10.w,
+          
+                        ///Surname Textfield
+                        MyTextField(
+                          controller: surnameController,
+                          hint: 'Surname',
+                          isPassword: false,
+                          width: 180,
+                        )
+                      ],
+                    ),
+                    10.h,
+          
+                    /// Email Textfield
+                    MyTextField(
+                      controller: emailController,
+                      hint: 'Email',
+                      isPassword: false,
+                    ),
+                    10.h,
+          
+                    /// Password Textfield
+                    MyTextField(
+                      controller: passwordController,
+                      hint: 'Password',
+                      isPassword: true,
+                    ),
+                    10.h,
+                    // Confirm Password Textfield
+                    MyTextField(
+                      controller: confirmPasswordController,
+                      hint: 'Confirm Password',
+                      isPassword: true,
+                    ),
+                    20.h,
+          
+                    /// SignUp Button
+                    MyButton(
+                      title: 'Register',
+                      onTap: signUp,
+                    ),
+                    15.h,
+          
+                    /// Register Line
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Already have an account?',
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 15,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        7.w,
+                        GestureDetector(
+                          onTap: widget.onTap,
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

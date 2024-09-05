@@ -1,4 +1,5 @@
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
 import 'package:coffee_shop/views/cart/widget/order_now_button.dart';
@@ -88,10 +89,7 @@ class _OrderViewState extends State<OrderView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Divider(
-              color: AppColors.onSecondary,
-              thickness: 0.2,
-            ),
+            AppDividers.homeViewDivider,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -143,10 +141,7 @@ class _OrderViewState extends State<OrderView> {
                 ),
               ),
 
-            const Divider(
-              color: AppColors.onSecondary,
-              thickness: 0.2,
-            ),
+            AppDividers.homeViewDivider,
 
             /// Order details
             Padding(

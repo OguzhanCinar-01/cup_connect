@@ -2,6 +2,7 @@
 
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_show_messages.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/cart/widget/cart_added_item.dart';
@@ -65,10 +66,7 @@ class _CartViewState extends State<CartView> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Divider(
-            color: AppColors.onSecondary,
-            thickness: 0.2,
-          ),
+          AppDividers.homeViewDivider,
 
           /// Cart title
           Row(
@@ -103,13 +101,7 @@ class _CartViewState extends State<CartView> {
               )),
 
           /// Divider
-          const Divider(
-            indent: 100,
-            endIndent: 100,
-            height: 10,
-            color: AppColors.onSecondary,
-            thickness: 0.2,
-          ),
+          AppDividers.cartViewDivider,
 
           /// Total
           Text(

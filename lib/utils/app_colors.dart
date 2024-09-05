@@ -10,6 +10,8 @@ class AppColors {
   static const Color surface = Color(0xFFF8F4E1);
   static const Color onSurface = Colors.black;
 
+  static  Color primarySurface = Colors.brown.shade800;
+
   static Color error = Colors.red.shade900;
   
   static Color orderStatusRed = const Color.fromARGB(255, 255, 204, 203);

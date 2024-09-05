@@ -1,3 +1,5 @@
+import 'package:coffee_shop/utils/app_dividers.dart';
+
 import '../../../extensions/space_exs.dart';
 import '../../../services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -45,76 +47,91 @@ class _LoginViewState extends State<LoginView> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  50.h,
-                  const CupConnectLogo(),
-                  10.h,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.primary,
+                  AppColors.primarySurface,
+                  AppColors.primary,
+                  AppColors.primarySurface,
+                ],
+              ),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    50.h,
+                    const CupConnectLogo(),
+                    50.h,
 
-                  /// Title
-                  const Text(
-                    'Welcome Back',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  15.h,
-
-                  /// Email Textfield
-                  MyTextField(
-                    controller: emailController,
-                    hint: 'Email',
-                    isPassword: false,
-                  ),
-                  10.h,
-
-                  /// Password Textfield
-                  MyTextField(
-                    controller: passwordController,
-                    hint: 'Password',
-                    isPassword: true,
-                  ),
-                  20.h,
-
-                  /// Login Button
-                  MyButton(
-                    title: 'Login',
-                    onTap: signIn,
-                  ),
-                  15.h,
-
-                  /// Register Line
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Don\'t have an account?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
+                    /// Title
+                    const Text(
+                      'Welcome Back',
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
-                      8.w,
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text(
-                          'Register',
+                    ),
+                    AppDividers.loginDivider,
+                    15.h,
+
+                    /// Email Textfield
+                    MyTextField(
+                      controller: emailController,
+                      hint: 'Email',
+                      isPassword: false,
+                    ),
+                    10.h,
+
+                    /// Password Textfield
+                    MyTextField(
+                      controller: passwordController,
+                      hint: 'Password',
+                      isPassword: true,
+                    ),
+                    20.h,
+
+                    /// Login Button
+                    MyButton(
+                      title: 'Login',
+                      onTap: signIn,
+                    ),
+                    15.h,
+
+                    /// Register Line
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Don\'t have an account?',
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            color: AppColors.onPrimary,
+                            fontSize: 15,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        8.w,
+                        GestureDetector(
+                          onTap: widget.onTap,
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(
+                              color: AppColors.onSecondary,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

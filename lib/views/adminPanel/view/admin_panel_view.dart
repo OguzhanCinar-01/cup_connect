@@ -2,6 +2,7 @@ import 'package:coffee_shop/navigation/navigation_manager.dart';
 import 'package:coffee_shop/services/auth/auth_gate.dart';
 import 'package:coffee_shop/services/auth/auth_service.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/utils/cupconnect_logo.dart';
 import 'package:coffee_shop/views/adminPanel/view/order_details.dart';
@@ -169,7 +170,7 @@ class _AdminPanelViewState extends State<AdminPanelView>
                           Text('Date: ${customerOrder['orderDate']}'),
                           Text('Time: ${customerOrder['orderTime']}'),
                           Text('Status: ${customerOrder['orderStatus']}'),
-                          const Divider(color: Colors.white),
+                          AppDividers.orderCardDivider,
                           ...orderItems.map((item) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -255,7 +256,7 @@ class _AdminPanelViewState extends State<AdminPanelView>
                               Text('Date: ${orderData['orderDate']}'),
                               Text('Time: ${orderData['orderTime']}'),
                               Text('Status: ${orderData['orderStatus']}'),
-                              const Divider(color: Colors.white),
+                              AppDividers.orderCardDivider,
                               ...orderItems.map((item) {
                                 return Padding(
                                   padding:
@@ -284,10 +285,7 @@ class _AdminPanelViewState extends State<AdminPanelView>
                   },
                 ),
               ),
-              const Divider(
-                color: AppColors.onSecondary,
-                thickness: 0.2,
-              ),
+              AppDividers.showMessaseDialogDivider,
               Padding(
                 padding:
                     const EdgeInsets.only(left: 30, right: 30, bottom: 30, top: 10),

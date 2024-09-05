@@ -1,8 +1,9 @@
+import 'package:coffee_shop/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CupConnectLogo extends StatelessWidget {
-  const CupConnectLogo({super.key, this.fontSize = 50, this.color = Colors.white});
+  const CupConnectLogo({super.key, this.fontSize = 60, this.color = AppColors.surface});
   final int fontSize;
   final Color color;
 

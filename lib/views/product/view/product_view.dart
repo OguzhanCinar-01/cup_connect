@@ -1,5 +1,6 @@
 import 'package:coffee_shop/extensions/space_exs.dart';
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_show_messages.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
@@ -57,12 +58,8 @@ class _ProductViewState extends State<ProductView> {
 
             ///Size Selector
             if (product.coffeeSize.isNotEmpty) _sizeSelector(),
-            const Divider(
-              color: AppColors.primary,
-              thickness: 0.3,
-              indent: 40,
-              endIndent: 40,
-            ),
+            AppDividers.productViewDivider,
+
             ///About the product
             _aboutProduct(),
             5.h,

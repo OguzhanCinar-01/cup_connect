@@ -1,3 +1,4 @@
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/views/home/viewmodel/load_user_view_model.dart';
@@ -84,10 +85,7 @@ class _HomeViewState extends State<HomeView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Divider(
-                color: Colors.black,
-                thickness: 0.2,
-              ),
+              AppDividers.homeViewDivider,
 
               /// Good morning text
               loadUserViewModel.isLoading

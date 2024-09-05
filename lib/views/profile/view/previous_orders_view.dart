@@ -1,4 +1,5 @@
 import 'package:coffee_shop/utils/app_colors.dart';
+import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
 import 'package:coffee_shop/utils/cupconnect_logo.dart';
 import 'package:coffee_shop/views/adminPanel/viewmodel/admin_panel_view_model.dart';
@@ -40,10 +41,7 @@ class _PreviousOrdersState extends State<PreviousOrdersView> {
       ),
       body: Column(
         children: [
-          const Divider(
-            color: AppColors.onSecondary,
-            thickness: 0.2,
-          ),
+          AppDividers.homeViewDivider,
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 8),
             alignment: Alignment.topLeft,
@@ -52,12 +50,7 @@ class _PreviousOrdersState extends State<PreviousOrdersView> {
               style: AppStyle.titleTextStyle,
             ),
           ),
-          const Divider(
-            color: AppColors.onSecondary,
-            thickness: 0.1,
-            endIndent: 180,
-            indent: 35,
-          ),
+          AppDividers.previousOrdersDivider,
           Expanded(
             child: adminPanelViewModel.isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -83,7 +76,7 @@ class _PreviousOrdersState extends State<PreviousOrdersView> {
                                   Text('Date: ${order['orderDate']}'),
                                   Text('Time: ${order['orderTime']}'),
                                   Text('Status: ${order['orderStatus']}'),
-                                  const Divider(color: Colors.white),
+                                  AppDividers.orderCardDivider,
                                   ...orderItems.map((item) {
                                     return Padding(
                                       padding:
