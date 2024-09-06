@@ -21,7 +21,7 @@ class _LoginViewState extends State<LoginView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  /// sign in user
+  /// sign in user or admin
   void signIn() async {
     final authService = Provider.of<AuthService>(context, listen: false);
 

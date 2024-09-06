@@ -21,16 +21,19 @@ class AuthService extends ChangeNotifier {
       String userId = userCredential.user!.uid;
 
       /// Get user role
-      DocumentSnapshot userDoc =
-          await FirebaseFirestore.instance.collection('users').doc(userId).get();
-      String role = userDoc.get('role');    
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      String role = userDoc.get('role');
 
-      if(role == 'admin') {
+      if (role == 'admin') {
         /// Navigate to admin panel
-        NavigationManager.instance.navigateToPageClear(const AdminPanelView());
+        await NavigationManager.instance
+            .navigateToPageClear(const AdminPanelView());
       } else {
         /// Navigate to home page
-        NavigationManager.instance.navigateToPageClear(const HomeView());
+        await NavigationManager.instance.navigateToPageClear(const HomeView());
       }
 
       return userCredential;

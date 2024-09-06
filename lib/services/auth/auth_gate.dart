@@ -1,6 +1,6 @@
 import 'package:coffee_shop/services/auth/login_or_register.dart';
+import 'package:coffee_shop/views/home/widget/my_circular_progress_indicator.dart';
 
-import '../../views/home/view/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +15,8 @@ class AuthGate extends StatelessWidget {
         builder: (context, snapshot) {
           ///User logged in
           if (snapshot.hasData) {
-            return const HomeView();
+            return const Center(child: MyCircularProgressIndicator());  
           }
-
           /// user couldn't log in
           else {
             // return const LoginOrRegister();
