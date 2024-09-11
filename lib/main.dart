@@ -24,15 +24,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        navigatorKey: NavigationManager.instance.navigatorKey,
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-        ),
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        home: const AuthGate(),
-        /// Add routes
-        /* 
+      navigatorKey: NavigationManager.instance.navigatorKey,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      home: const AuthGate(),
+
+      /// Add routes
+      /* 
         routes: {
           '/authGate': (context) => const AuthGate(),
           '/home': (context) => const HomeView(),
@@ -41,6 +42,6 @@ class MyApp extends StatelessWidget {
           '/order': (context) => const OrderView(),
           '/productView': (context) => const ProductView(),
         }*/
-        );
+    );
   }
 }

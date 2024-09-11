@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:coffee_shop/utils/app_dividers.dart';
 import 'package:coffee_shop/utils/app_strings.dart';
 import 'package:coffee_shop/utils/app_styles.dart';
@@ -55,6 +57,19 @@ class _HomeViewState extends State<HomeView> {
         _searchController.text;
   }
 
+  String getUserTextMessage() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+
+    if (hour < 12) {
+      return AppStr.goodMorning;
+    } else if (hour >= 12 && hour < 18) {
+      return AppStr.goodAfternoon;
+    } else {
+      return AppStr.goodEvening;
+    }
+  }
+
   List<Widget> myTabs = [
     const MyTab(
       iconPath: 'assets/images/hot_coffee.png',
@@ -90,7 +105,7 @@ class _HomeViewState extends State<HomeView> {
               /// Good morning text
               loadUserViewModel.isLoading
                   ? const Center(child: MyCircularProgressIndicator())
-                  : _goodMorningText(loadUserViewModel.userName),
+                  : _greetingText(loadUserViewModel.userName),
 
               20.h,
 
@@ -113,12 +128,12 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _goodMorningText(String name) {
+  Widget _greetingText(String name) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 20, left: 35),
       child: Text(
-        '${AppStr.goodMorning}, $name',
+        '${getUserTextMessage()}, $name',
         style: AppStyle.titleTextStyle,
       ),
     );

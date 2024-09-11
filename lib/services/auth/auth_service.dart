@@ -67,4 +67,20 @@ class AuthService extends ChangeNotifier {
   Future<void> signOut() async {
     return await FirebaseAuth.instance.signOut();
   }
+
+  /// Handle redirect Homepage
+  Future<void> handleRedirect(User user) async {
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    final role = userDoc.get('role');
+
+    if (role == 'admin') {
+      await NavigationManager.instance
+          .navigateToPageClear(const AdminPanelView());
+    } else {
+      await NavigationManager.instance.navigateToPageClear(const HomeView());
+    }
+  }
 }
